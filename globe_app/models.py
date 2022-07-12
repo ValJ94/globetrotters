@@ -23,6 +23,9 @@ class TravelHistory(models.Model):
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     travelPics = models.ImageField(upload_to="travelPics", blank=True)
     travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'TravelHistories'
     
 class TravelWishlist(models.Model):
     # owner = models.ForeignKey(User)
@@ -42,13 +45,16 @@ class UpcomingTravel(models.Model):
 class ForumPost(models.Model):
     # author = models.ForeignKey(User)
     title = models.CharField(max_length=maxCharLength)
-    date = models.DateField()
+    date = models.DateField() # default needs to be current date
     content = models.TextField()
 
 class PostReply(models.Model):
     post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
     # author = models.ForeignKey(User)
     title = models.CharField(max_length=maxCharLength)
-    date = models.DateField()
+    date = models.DateField() # default needs to be current date
     content = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'PostReplies'
 

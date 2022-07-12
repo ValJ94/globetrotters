@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+{% block title_block %}
+    Logged Out
+{% endblock %}
+
+{% block body_block %}
+<div>
+    <h1>
+        You have logged out successfully. </b>
+    </h1>
+</div>
+<div>
+    Return to the 
+    <a href="{% url 'index' %}">Homepage</a>
+</div>
+
+
+{% endblock %}

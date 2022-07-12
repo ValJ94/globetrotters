@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+{% block title_block %}
+    Log in
+{% endblock %}
+
+{% block body_block %}
+<h1>Log In</h1>
+<form method="post" action="."> 
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Log In"/>
+    <input type="hidden" name="next" value="{{ next }}"/>
+</form>
+<div>
+    Not Registered Yet?
+    <a href="{% url 'registration_register' %}">Register</a>
+</div>
+
+
+{% endblock %}
