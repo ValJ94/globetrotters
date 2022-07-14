@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Homepage</title>
+    </head>
+
+    <body>
+        <h1>HOMEPAGE</h1>
+        <div>
+            <strong>Welcome to Globetrotters</strong>
+        </div>
+        <div>
+            <img src="{% static 'images/test.jpg' %}" alt="Test Image"/>
+        </div>
+        {% if user.is_authenticated %}
+        <div>
+            <a href="{% url 'auth_logout' %}?next={% url 'index' %}">Log out</a>
+        </div>
+        <div>
+            <a href="{% url 'auth_password_change' %}">Change password</a>
+        </div>
+        <div>
+            <a href="profile/{{user.username}}">Profile</a>
+        </div>
+        {% else %}
+        <div>
+            <a href="{% url 'auth_login' %}">Log in</a>
+        </div>
+        <div>
+            <a href="{% url 'registration_register' %}">Register</a>
+        </div>
+        {% endif %}
+
+    </body>
+
+</html>

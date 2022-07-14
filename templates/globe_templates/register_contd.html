@@ -1,0 +1,11 @@
+{% load static %}
+
+<h1>Register Here</h1> </b>
+
+<form method="post"
+    action="{% url 'globe_app:register_contd' %}" 
+    enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form> 

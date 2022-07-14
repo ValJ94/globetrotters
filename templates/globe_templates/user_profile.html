@@ -1,0 +1,16 @@
+{% load static %}
+
+<h1>{{ user_profile.first_name }} {{user_profile.middle_name  }} {{ user_profile.surname }}</h1>
+
+<div>
+    <img src="{{ MEDIA_URL }}{{ user_profile.picture }}"
+    alt="{{ user.username }}'s profile picture "/><br/>
+</div>
+<div>
+
+    <div>
+
+        Age: {{ user_profile.age }}<br/>
+        Description: {{ user_profile.description }}<br/>
+    </div>
+</div>
