@@ -23,7 +23,7 @@
             <a href="{% url 'auth_password_change' %}">Change password</a>
         </div>
         <div>
-            <a href="profile/{{user.username}}">Profile</a>
+            <a href="{% url 'globe_app:profile' user.username %}">My Profile</a>
         </div>
         {% else %}
         <div>
