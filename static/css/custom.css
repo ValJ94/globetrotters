@@ -1,0 +1,36 @@
+
+.container_green{
+    background-color: rgba(143, 213, 166, 75%); 
+    margin: auto;
+    text-align:center;
+    align-items: center;
+}
+
+.container_white{
+    background-color: rgba(255, 255, 255, 0.75); 
+    margin: auto;
+    text-align:center;
+    align-items: center;
+}
+
+#map {
+    width: 800px; 
+    height: 600px;  
+    margin: auto;
+}
+
+.profile_image{
+    margin: auto;
+    text-align:center;
+    align-items: center;
+
+    /* margin-left: 2cm;
+    overflow: hidden;
+    text-align: left; */
+}
+
+.profile_content{    background-color: rgba(255, 255, 255, 0.75); 
+
+    background-color: rgba(255, 255, 255, 0.75); 
+    text-align: right;
+}

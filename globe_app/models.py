@@ -38,7 +38,7 @@ class TravelHistory(models.Model):
     # owner = models.ForeignKey(User)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     travelPics = models.ImageField(upload_to="travelPics", blank=True)
-    travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
+    travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE, blank=True)
 
     class Meta:
         verbose_name_plural = 'TravelHistories'
@@ -49,7 +49,7 @@ class TravelWishlist(models.Model):
     travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
 
 class UpcomingTravel(models.Model):
-    # owner = models.ForeignKey(User)
+    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default="")
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     dateStart = models.DateField()
     dateEnd = models.DateField()

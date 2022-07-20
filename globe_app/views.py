@@ -1,8 +1,7 @@
-from unicodedata import name
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from globe_app.models import UserProfile
+from globe_app.models import *
 from globe_app.forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -12,6 +11,7 @@ def index(request):
     return render(request, 'globe_templates/index.html')
 
 # Registration with customised fields (i.e., not supplied by Django Registration Redux Package)
+# Code adapted from Tango With Django 2 (Azzopardi & Maxell, 2020)
 @login_required
 def register_contd(request):
     profile_form = ProfileForm()
@@ -32,6 +32,7 @@ def register_contd(request):
 
 
 # View profile
+# Code adapted from the Tango With Django 2 book (Azzopardi & Maxell, 2020)
 def profile(request, username):
     curr_user = User.objects.get(username=username)
 
@@ -49,4 +50,34 @@ def profile(request, username):
     return render(request,  'globe_templates/user_profile.html', context_dict)
 
 
+def forum(request):
+    context_dict = {}
+    return render(request, 'globe_templates/forum.html', context_dict)
 
+def about(request):
+    context_dict = {}
+    return render(request, 'globe_templates/about.html', context_dict)
+
+def find_buddy(request):
+    context_dict = {}
+    return render(request, 'globe_templates/find_buddy.html', context_dict)
+
+def upcoming_travels(request):
+    context_dict = {}
+    return render(request, 'globe_templates/upcoming_travels.html', context_dict)
+
+def travel_history(request):
+    context_dict = {}
+    return render(request, 'globe_templates/travel_history.html', context_dict)
+
+def travel_wishlist(request):
+    context_dict = {}
+    return render(request, 'globe_templates/travel_wishlist.html', context_dict)
+
+def travel_notes(request):
+    context_dict = {}
+    return render(request, 'globe_templates/travel_notes.html', context_dict)
+
+def my_trips(request):
+    context_dict = {}
+    return render(request, 'globe_templates/my_trips.html', context_dict)

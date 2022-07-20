@@ -1,5 +1,12 @@
+{% extends 'globe_templates/base.html' %}
 {% load static %}
 
+
+{% block title_block %}
+    Registration
+{% endblock %}
+
+{% block content_block %}
 <h1>Register Here</h1> </b>
 
 <form method="post"
@@ -9,3 +16,4 @@
     {{ form.as_p }}
     <input type="submit" value="Submit" />
 </form> 
+{% endblock %}

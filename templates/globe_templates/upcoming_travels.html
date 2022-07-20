@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+
+{% block title_block %}
+Upcoming Travels
+{% endblock %}
+
+{% block content_block %}
+<!-- MAPBOX API -->
+<div id='map' style='width: 800px; height: 600px;  margin: auto;'></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11'
+    });
+</script>
+
+
+{% endblock %}

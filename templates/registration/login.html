@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
 
 {% block title_block %}
     Log in
 {% endblock %}
 
-{% block body_block %}
-<h1>Log In</h1>
+{% block content_block %}
+<h2>Log In</h2>
 <form method="post" action="."> 
     {% csrf_token %}
     {{ form.as_p }}
@@ -17,6 +19,5 @@
     Not Registered Yet?
     <a href="{% url 'registration_register' %}">Register</a>
 </div>
-
 
 {% endblock %}
