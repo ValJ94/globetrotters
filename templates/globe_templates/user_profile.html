@@ -8,26 +8,21 @@
 
 {% block general_content_block %}
 <div class="profile_image">
-    <h1>{{ user_profile.first_name }} {{user_profile.middle_name }} {{ user_profile.surname }}</h1> <br />
+    {% if user_profile.picture %}
     <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" alt="{{ user.username }}'s profile picture " /><br />
-</div>
-<div class="profile_content">
-    <ul style="list-style-type: none;">
+    {% endif %}
+    <ul class="profile_content" style="list-style-type: none;">
+        <li>
+            <h1>{{ user_profile.first_name }} {{user_profile.middle_name }} {{ user_profile.surname }}</h1>
+        </li>
         <li>Age: {{ user_profile.age }}</li>
         <li>Description: {{ user_profile.description }}</li>
     </ul>
 </div>
+
 {% endblock %}
 
 {% block white_content_block %}
 
-<!-- Mapbox API -->
-<div id='map'></div>
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11'
-    });
-</script>
+
 {% endblock %}

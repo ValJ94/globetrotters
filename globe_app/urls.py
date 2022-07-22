@@ -15,4 +15,9 @@ urlpatterns = [
     path('travel_wishlist/', views.travel_wishlist, name='travel_wishlist'),
     path('travel_notes/', views.travel_notes, name='travel_notes'),
     path('my_trips/', views.my_trips, name='my_trips'),
+    path('save_location/', views.save_location, name='save_location'),
+    # path('add_location/', views.add_location, name='add_location'),
+    path('get_user_saved_locations/', views.get_user_saved_locations, name='get_user_saved_locations'),
+    path('add_upcoming_travel/', views.add_upcoming_travel, name='add_upcoming_travel'),
+    # path('show_upcoming_travels/', views.show_upcoming_travels, name='show_upcoming_travels'),
 ]

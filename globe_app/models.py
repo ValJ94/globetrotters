@@ -6,15 +6,22 @@ maxCharLength = 128
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
     first_name = models.CharField(max_length=maxCharLength)
     middle_name = models.CharField(max_length=maxCharLength, blank=True)
     surname = models.CharField(max_length=maxCharLength)
     age = models.IntegerField()
     description = models.TextField(blank=True)
-    # gender = models.CharField()
-    # rating = models.FloatField()
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('NB', 'Non Binary'),
+        ('PNTD', 'Prefer not to say'),
+    )
+    gender = models.CharField(max_length=4, choices=GENDER_CHOICES, blank=True)
     picture = models.ImageField(upload_to='profilePics', blank=True)
+
+    # rating = models.FloatField()
+
 
     def __str__(self):
         return self.user.username
@@ -22,10 +29,12 @@ class UserProfile(models.Model):
 
 class Destination(models.Model):
     # must be related to the map API used somehow.
-    location = models.CharField(max_length=maxCharLength, unique=True)
+    locationName = models.TextField(unique=True)
+    longitude = models.FloatField(default=0.0)
+    latitude = models.FloatField(default=0.0)
 
     def __str__(self):
-        return self.location
+        return self.locationName
 
 class TravelNote(models.Model):
     # owner = models.ForeignKey(User)
@@ -53,9 +62,9 @@ class UpcomingTravel(models.Model):
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     dateStart = models.DateField()
     dateEnd = models.DateField()
-    budgetStart = models.FloatField()
-    budgetEnd = models.FloatField()
-    travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
+    budgetStart = models.DecimalField(max_digits=6, decimal_places=2)
+    budgetEnd = models.DecimalField(max_digits=6, decimal_places=2)
+    # travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE, blank=True)
 
 
 class ForumPost(models.Model):

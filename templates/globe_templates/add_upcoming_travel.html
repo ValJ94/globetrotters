@@ -1,0 +1,89 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+Add Location to Upcoming
+{% endblock %}
+
+{% block content_block %}
+
+<!-- <div id="map"></div> -->
+
+<button onclick="saveLocation()">
+    Save Location
+</button>
+
+<!-- <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        // projection: 'globe',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        projection: 'naturalEarth',
+        zoom: 0.75
+    });
+
+    // Search box for locations (countries, cities, addresses etc)
+    let myMap = map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+        })
+    );
+
+    function saveLocation() {
+        console.log(map._markers);
+        let latitude = map._markers[0]._lngLat.lat;
+        let longitude = map._markers[0]._lngLat.lng;
+        let locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+
+        if (!locationFullName || !latitude || !longitude) {
+            return;
+        }
+
+        let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+        // ajax request to send the coordinates to the backend
+        $.ajax({
+            type: "POST",
+            url: "{% url 'globe_app:save_location' %}",
+            headers: { 'X-CSRFToken': csrfToken },
+            data: {
+                'latitude': latitude,
+                'longitude': longitude,
+                'locationFullName': locationFullName
+            },
+            // success and error are callbacks. They notify when the request is done.
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('failed');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }
+
+</script> -->
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ form.media }}
+    <br />
+    <button class="btn btn-primary" type="submit" name="submit">
+        Add To Upcoming Travels
+    </button>
+</form>
+
+<script>
+    $("#date_start").datepicker();
+    $("#date_end").datepicker();
+</script>
+
+
+<a class="nav-link active" href="{% url 'globe_app:upcoming_travels' %}">Back to Upcoming Travels</a>
+
+{% endblock %}

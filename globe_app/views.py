@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -5,6 +6,8 @@ from globe_app.models import *
 from globe_app.forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
+from django.http import JsonResponse
 
 
 def index(request):
@@ -63,7 +66,11 @@ def find_buddy(request):
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 def upcoming_travels(request):
-    context_dict = {}
+        
+    print('show upcoming working')
+    upcoming_data = UpcomingTravel.objects.all()
+    context_dict = {'upcomingList': upcoming_data}
+
     return render(request, 'globe_templates/upcoming_travels.html', context_dict)
 
 def travel_history(request):
@@ -81,3 +88,69 @@ def travel_notes(request):
 def my_trips(request):
     context_dict = {}
     return render(request, 'globe_templates/my_trips.html', context_dict)
+
+# add location template
+# def add_location(request):
+def add_upcoming_travel(request):
+    upcoming_form = upcomingTravelForm()
+    
+    if request.method == 'POST':
+        upcoming_form = upcomingTravelForm(request.POST)
+
+        if upcoming_form.is_valid():
+            upcoming_form.save(commit=True)
+            return redirect('/globetrotters/upcoming_travels/')
+        else:
+            print(upcoming_form.errors)
+
+    context_dict = {'form': upcoming_form}
+    return render(request, 'globe_templates/add_upcoming_travel.html', context_dict)
+
+
+# save a location to the map
+def save_location(request):
+    # print(request.POST['longitude'])
+    # print(request.POST['latitude'])
+    # print(request.POST['locationFullName'])
+
+    locationObject, created = Destination.objects.get_or_create(
+        locationName = request.POST['locationFullName']
+    )
+
+# in case of adding new fields, you don't want to have copies of the same data
+    if created:
+        locationObject.latitude = request.POST['latitude']
+        locationObject.longitude = request.POST['longitude']
+        locationObject.save()
+    else:
+        pass
+
+    return JsonResponse({'message':'Location saved'})
+
+# def add_upcoming_details(request):
+#     # form for other fields in upcoming travels
+#     upcoming_travel_form = upcomingTravelForm()
+    
+#     if request.method == 'POST':
+#         upcoming_travel_form = upcomingTravelForm(request.POST)
+
+#         if upcoming_travel_form.is_valid():
+#             # save the travel details to the db
+#             upcoming_travel_form.save(commit=True)
+#             # redirect user back to the index view
+#             return redirect('/index/')
+#         else:
+#             print(upcoming_travel_form.errors)
+
+#     return render(request,  'globe_templates/add_location.html', {'form': upcoming_travel_form})
+
+
+
+# get the coordinates to show the locations on the map
+def get_user_saved_locations(request):
+    print('Getting the locations now')
+
+    locationObjects = Destination.objects.all()
+    lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
+    # The below coordinates will be retrieved by the user's saved locations model
+    return JsonResponse({'locationList': lngLatList})
