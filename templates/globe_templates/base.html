@@ -60,7 +60,7 @@
                                 My Trips
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'globe_app:upcoming_travels' %}">Upcoming
+                                <li><a class="dropdown-item" href="{% url 'globe_app:upcoming_travels' user.username %}">Upcoming
                                         Travels</a></li>
                                 <li><a class="dropdown-item" href="{% url 'globe_app:travel_history' %}">Travel
                                         History</a></li>

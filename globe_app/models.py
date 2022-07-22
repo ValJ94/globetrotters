@@ -58,7 +58,8 @@ class TravelWishlist(models.Model):
     travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
 
 class UpcomingTravel(models.Model):
-    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default="")
+    # owner = models.ForeignKey(UserProfile, default='', unique=False, on_delete=models.CASCADE)
+    owner = models.CharField(null=False, max_length=maxCharLength, blank=False, default="testing3")
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     dateStart = models.DateField()
     dateEnd = models.DateField()

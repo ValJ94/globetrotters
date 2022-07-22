@@ -65,10 +65,9 @@ def find_buddy(request):
     context_dict = {}
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
-def upcoming_travels(request):
-        
-    print('show upcoming working')
-    upcoming_data = UpcomingTravel.objects.all()
+def upcoming_travels(request, owner):
+
+    upcoming_data = UpcomingTravel.objects.filter(owner=owner)
     context_dict = {'upcomingList': upcoming_data}
 
     return render(request, 'globe_templates/upcoming_travels.html', context_dict)
@@ -99,20 +98,18 @@ def add_upcoming_travel(request):
 
         if upcoming_form.is_valid():
             upcoming_form.save(commit=True)
-            return redirect('/globetrotters/upcoming_travels/')
+            return redirect(f'/globetrotters/upcoming_travels/{request.POST["owner"]}')
+            # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
         else:
             print(upcoming_form.errors)
 
-    context_dict = {'form': upcoming_form}
+    context_dict = {'form': upcoming_form,}
+
     return render(request, 'globe_templates/add_upcoming_travel.html', context_dict)
 
 
 # save a location to the map
 def save_location(request):
-    # print(request.POST['longitude'])
-    # print(request.POST['latitude'])
-    # print(request.POST['locationFullName'])
-
     locationObject, created = Destination.objects.get_or_create(
         locationName = request.POST['locationFullName']
     )
@@ -127,30 +124,13 @@ def save_location(request):
 
     return JsonResponse({'message':'Location saved'})
 
-# def add_upcoming_details(request):
-#     # form for other fields in upcoming travels
-#     upcoming_travel_form = upcomingTravelForm()
-    
-#     if request.method == 'POST':
-#         upcoming_travel_form = upcomingTravelForm(request.POST)
-
-#         if upcoming_travel_form.is_valid():
-#             # save the travel details to the db
-#             upcoming_travel_form.save(commit=True)
-#             # redirect user back to the index view
-#             return redirect('/index/')
-#         else:
-#             print(upcoming_travel_form.errors)
-
-#     return render(request,  'globe_templates/add_location.html', {'form': upcoming_travel_form})
-
-
 
 # get the coordinates to show the locations on the map
 def get_user_saved_locations(request):
     print('Getting the locations now')
 
     locationObjects = Destination.objects.all()
+
     lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
     # The below coordinates will be retrieved by the user's saved locations model
     return JsonResponse({'locationList': lngLatList})

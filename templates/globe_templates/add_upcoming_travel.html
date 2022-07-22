@@ -8,17 +8,16 @@ Add Location to Upcoming
 
 {% block content_block %}
 
-<!-- <div id="map"></div> -->
+<div id="map"></div>
 
-<button onclick="saveLocation()">
+<button onclick="saveLocation()" >
     Save Location
 </button>
 
-<!-- <script>
+<script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
     var map = new mapboxgl.Map({
         container: 'map',
-        // projection: 'globe',
         style: 'mapbox://styles/mapbox/streets-v11',
         projection: 'naturalEarth',
         zoom: 0.75
@@ -32,6 +31,7 @@ Add Location to Upcoming
         })
     );
 
+    // save the location information to the backend from Mapbox API
     function saveLocation() {
         console.log(map._markers);
         let latitude = map._markers[0]._lngLat.lat;
@@ -66,10 +66,11 @@ Add Location to Upcoming
         });
     }
 
-</script> -->
+</script>
 
 <form method="post" action="">
     {% csrf_token %}
+    <input type="hidden" value="{{ user }}" name="owner"/>
     {{ form.as_p }}
     {{ form.media }}
     <br />
@@ -84,6 +85,6 @@ Add Location to Upcoming
 </script>
 
 
-<a class="nav-link active" href="{% url 'globe_app:upcoming_travels' %}">Back to Upcoming Travels</a>
+<a class="nav-link active" href="{% url 'globe_app:upcoming_travels' user %}">Back to Upcoming Travels</a>
 
 {% endblock %}

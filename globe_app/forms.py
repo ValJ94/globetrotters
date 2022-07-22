@@ -12,20 +12,12 @@ class ProfileForm(forms.ModelForm):
 
 
 class upcomingTravelForm(ModelForm):
-    # dateStart = forms.DateField(widget=AdminDateWidget())
-    # dateEnd = forms.DateField(widget=AdminDateWidget())
-    # dateEnd = forms.DateField(widget=extras.SelectDateWidget)
-    # budgetStart = forms.FloatField(initial=0.0)
-    # budgetEnd = forms.FloatField(initial=0.0)
-    # travelNotes = forms.ForeignKey(TravelNote, blank=True)
-
     class Meta:
         model = UpcomingTravel
-        fields = ('owner','destination', 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
+        fields = ('destination', 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
 
         labels = {
-            'owner': '',
-            'destination': '',
+            'destination': 'Destination',
             'dateStart': '', 
             'dateEnd': '',
             'budgetStart': '',
@@ -33,10 +25,14 @@ class upcomingTravelForm(ModelForm):
         }
 
         widgets = {
-            'dateStart': forms.DateInput(attrs={'class':'form-control, col-xs-2', 'placeholder': 'Start date of trip', 'id': 'date_start'}), # form-control is bootstrap
-            # 'dateStart': AdminDateWidget(),
-            'dateEnd': forms.DateInput(attrs={'class':'form-control, col-xs-3', 'placeholder': 'End date of trip', 'id': 'date_end'}),
-            # 'dateEnd': AdminDateWidget(),
-            'budgetStart': forms.NumberInput(attrs={'class':'form-control, col-xs-4', 'placeholder': 'Budget from (in GBP): '}),
-            'budgetEnd': forms.NumberInput(attrs={'class':'form-control, col-xs-6', 'placeholder': 'Budget to (in GBP): '}),
+            'dateStart': forms.DateInput(attrs={'class':'form-control, col-xs-2', 
+                                                'placeholder': 'Start date of trip', 
+                                                'id': 'date_start'}), # form-control is bootstrap
+            'dateEnd': forms.DateInput(attrs={'class':'form-control, col-xs-3', 
+                                                'placeholder': 'End date of trip', 
+                                                'id': 'date_end'}),
+            'budgetStart': forms.NumberInput(attrs={'class':'form-control, col-xs-4', 
+                                                    'placeholder': 'Budget from (in GBP): '}),
+            'budgetEnd': forms.NumberInput(attrs={'class':'form-control, col-xs-6', 
+                                                    'placeholder': 'Budget to (in GBP): '}),
         }

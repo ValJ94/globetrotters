@@ -90,17 +90,16 @@ Upcoming Travels
 
 <div class="card">
     {% for trip in upcomingList %}
-    <h5 class="card-header"><strong>{{ trip }}</strong></h5>
-    <div class="card-body">
-        <h5 class="card-title">{{ trip.destination }}</h5>
-        <p class="card-text">
-            <li>Owner: {{ trip.owner }}</li>
-            <li>Trip starts: {{ trip.dateStart }}</li>
-            <li>Trip ends: {{ trip.dateEnd }}</li>
-            <li>Budget lower range: {{ trip.budgetStart }}</li>
-            <li>Budget higher range: {{ trip.budgetEnd }}</li>
-        </p>
-    </div>
+        <h5 class="card-header"><strong>{{ trip.destination }}</strong></h5>
+        <div class="card-body">
+            <!-- <h5 class="card-title">{{ trip.destination }}</h5> -->
+            <p class="card-text">
+                <li>Trip starts: {{ trip.dateStart }}</li>
+                <li>Trip ends: {{ trip.dateEnd }}</li>
+                <li>Budget lower range: £{{ trip.budgetStart }}</li>
+                <li>Budget higher range: £{{ trip.budgetEnd }}</li>
+            </p>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}
