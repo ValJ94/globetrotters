@@ -17,7 +17,7 @@ urlpatterns = [
     path('my_trips/', views.my_trips, name='my_trips'),
     path('save_location/', views.save_location, name='save_location'),
     # path('add_location/', views.add_location, name='add_location'),
-    path('get_user_saved_locations/', views.get_user_saved_locations, name='get_user_saved_locations'),
+    path('get_user_saved_locations/<user>/', views.get_user_saved_locations, name='get_user_saved_locations'),
     path('add_upcoming_travel/', views.add_upcoming_travel, name='add_upcoming_travel'),
     # path('show_upcoming_travels/', views.show_upcoming_travels, name='show_upcoming_travels'),
 ]

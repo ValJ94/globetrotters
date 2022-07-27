@@ -1,4 +1,5 @@
 from multiprocessing import context
+import this
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -66,8 +67,9 @@ def find_buddy(request):
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 def upcoming_travels(request, owner):
-
     upcoming_data = UpcomingTravel.objects.filter(owner=owner)
+    # upcoming_data = UpcomingTravel.objects.all()
+    # print(UpcomingTravel.objects.all())
     context_dict = {'upcomingList': upcoming_data}
 
     return render(request, 'globe_templates/upcoming_travels.html', context_dict)
@@ -110,27 +112,42 @@ def add_upcoming_travel(request):
 
 # save a location to the map
 def save_location(request):
-    locationObject, created = Destination.objects.get_or_create(
+    destinationObject, created = Destination.objects.get_or_create(
         locationName = request.POST['locationFullName']
     )
 
 # in case of adding new fields, you don't want to have copies of the same data
     if created:
-        locationObject.latitude = request.POST['latitude']
-        locationObject.longitude = request.POST['longitude']
-        locationObject.save()
+        destinationObject.latitude = request.POST['latitude']
+        destinationObject.longitude = request.POST['longitude']
+        destinationObject.save()
     else:
         pass
+
+    locationObject, created = UpcomingTravel.objects.get_or_create(
+        destination = destinationObject,
+        dateStart = request.POST['dateStart'],
+        dateEnd = request.POST['dateEnd'],
+        budgetStart = request.POST['budgetStart'],
+        budgetEnd = request.POST['budgetEnd'],
+        owner = request.POST['owner'],
+    )
+
 
     return JsonResponse({'message':'Location saved'})
 
 
 # get the coordinates to show the locations on the map
-def get_user_saved_locations(request):
+def get_user_saved_locations(request, user):
+    # owner = request.POST['user']
     print('Getting the locations now')
 
-    locationObjects = Destination.objects.all()
+    # locationObjects = Destination.objects.all()
+    locationObjects = UpcomingTravel.objects.filter(owner=user)
 
-    lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
+    lngLatList = [(record.destination.longitude, record.destination.latitude) for record in locationObjects]
+    print(lngLatList)
+    # lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
+
     # The below coordinates will be retrieved by the user's saved locations model
     return JsonResponse({'locationList': lngLatList})

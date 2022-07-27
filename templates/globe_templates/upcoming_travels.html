@@ -14,7 +14,7 @@ Upcoming Travels
 
 
 <!-- Mapbox API (Mapbox.com) -->
-<!-- <div id="map"></div>
+<div id="map"></div>
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -60,7 +60,7 @@ Upcoming Travels
         // ajax request to send the coordinates to the backend
         $.ajax({
             type: "GET",
-            url: "{% url 'globe_app:get_user_saved_locations' %}",
+            url: "{% url 'globe_app:get_user_saved_locations' user %}",
             headers: { 'X-CSRFToken': csrfToken },
             // success and error are callbacks. They notify when the request is done.
             success: function (response) {
@@ -82,7 +82,7 @@ Upcoming Travels
 
     document.addEventListener("load", getLocations());
 
-</script> -->
+</script>
 
 {% endblock %}
 

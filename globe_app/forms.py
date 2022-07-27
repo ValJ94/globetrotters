@@ -14,10 +14,9 @@ class ProfileForm(forms.ModelForm):
 class upcomingTravelForm(ModelForm):
     class Meta:
         model = UpcomingTravel
-        fields = ('destination', 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
+        fields = ( 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
 
         labels = {
-            'destination': 'Destination',
             'dateStart': '', 
             'dateEnd': '',
             'budgetStart': '',
@@ -32,7 +31,9 @@ class upcomingTravelForm(ModelForm):
                                                 'placeholder': 'End date of trip', 
                                                 'id': 'date_end'}),
             'budgetStart': forms.NumberInput(attrs={'class':'form-control, col-xs-4', 
-                                                    'placeholder': 'Budget from (in GBP): '}),
+                                                    'placeholder': 'Budget from (in GBP): ',
+                                                    'id': 'budget_start'}),
             'budgetEnd': forms.NumberInput(attrs={'class':'form-control, col-xs-6', 
-                                                    'placeholder': 'Budget to (in GBP): '}),
+                                                    'placeholder': 'Budget to (in GBP): ',
+                                                    'id': 'budget_end'}),
         }

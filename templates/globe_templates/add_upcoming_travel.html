@@ -10,9 +10,9 @@ Add Location to Upcoming
 
 <div id="map"></div>
 
-<button onclick="saveLocation()" >
+<!-- <button onclick="saveLocation()">
     Save Location
-</button>
+</button> -->
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -37,6 +37,13 @@ Add Location to Upcoming
         let latitude = map._markers[0]._lngLat.lat;
         let longitude = map._markers[0]._lngLat.lng;
         let locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+        // the following are values input into the form boxes
+
+        let dateStart = $('#date_start').val(); 
+        let dateEnd = $('#date_end').val(); 
+        let budgetStart = $('#budget_start').val(); 
+        let budgetEnd = $('#budget_end').val(); 
+        let owner = "{{user}}";
 
         if (!locationFullName || !latitude || !longitude) {
             return;
@@ -51,7 +58,12 @@ Add Location to Upcoming
             data: {
                 'latitude': latitude,
                 'longitude': longitude,
-                'locationFullName': locationFullName
+                'locationFullName': locationFullName,
+                'dateStart': dateStart,
+                'dateEnd': dateEnd,
+                'budgetStart': budgetStart,
+                'budgetEnd': budgetEnd,
+                'owner': owner,
             },
             // success and error are callbacks. They notify when the request is done.
             success: function (response) {
@@ -68,20 +80,20 @@ Add Location to Upcoming
 
 </script>
 
-<form method="post" action="">
+<div>
     {% csrf_token %}
-    <input type="hidden" value="{{ user }}" name="owner"/>
+    <input type="hidden" />
     {{ form.as_p }}
     {{ form.media }}
     <br />
-    <button class="btn btn-primary" type="submit" name="submit">
+    <button class="btn btn-primary" type="button" name="submit" onclick="saveLocation()">
         Add To Upcoming Travels
     </button>
-</form>
+</div>
 
 <script>
-    $("#date_start").datepicker();
-    $("#date_end").datepicker();
+    $("#date_start").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#date_end").datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
 
 
