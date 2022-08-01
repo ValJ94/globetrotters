@@ -1,12 +1,13 @@
-from multiprocessing import context
-import this
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from globe_app.models import *
-from globe_app.forms import *
+from .models import Message, UserProfile, UpcomingTravel, Destination, MessageThread
+from .forms import MessageThreadForm, ProfileForm, upcomingTravelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
+from .filters import BuddyFilter, UserFilter
+from django.views import View
 
 from django.http import JsonResponse
 
@@ -61,10 +62,6 @@ def forum(request):
 def about(request):
     context_dict = {}
     return render(request, 'globe_templates/about.html', context_dict)
-
-def find_buddy(request):
-    context_dict = {}
-    return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 def upcoming_travels(request, owner):
     upcoming_data = UpcomingTravel.objects.filter(owner=owner)
@@ -135,6 +132,7 @@ def save_location(request):
 
 
     return JsonResponse({'message':'Location saved'})
+    # return redirect(f'/globetrotters/upcoming_travels/{request.POST["owner"]}')
 
 
 # get the coordinates to show the locations on the map
@@ -151,3 +149,80 @@ def get_user_saved_locations(request, user):
 
     # The below coordinates will be retrieved by the user's saved locations model
     return JsonResponse({'locationList': lngLatList})
+
+
+def find_buddy(request):
+    myFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all())
+    myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
+    # myUsernameFilter = UsernameFilter(request.GET, queryset=User.objects.all())
+
+
+
+    trips = myFilter.qs
+    # tripsList = [trip.owner for trip in trips]
+    # users = [User.objects.get(username=user) for user in tripsList]
+    # print(users)
+    users = myUserFilter.qs
+    # usernames = myUsernameFilter.qs
+
+    # owner = (User.username == UpcomingTravel.owner)
+
+
+    context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 
+                    'trips': trips, 'users': users, }
+    # context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 'myUsernameFilter': myUsernameFilter, 
+    #                 'trips': trips, 'users': users, 'usernames': usernames}
+
+    return render(request, 'globe_templates/find_buddy.html', context_dict)
+
+
+def buddy_search_results(request):
+    if request.method == 'POST':
+        searched = request.POST['searched']
+        destinations = UpcomingTravel.objects.filter(destination__locationName__icontains=searched)
+        return render(request, 
+        'globe_templates/buddy_search_results.html', 
+        {'searched': searched,
+        'destinations': destinations})
+    else:
+        return render(request, 'globe_templates/buddy_search_results.html')
+
+# Messaging
+class ListThreads(View):
+    def get(self, request, *args, **kwargs):
+        messageThreads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+
+        context_dict = {'messageThreads': messageThreads}
+
+        return render(request, 'globe_templates/inbox.html', context_dict)
+
+
+class CreateThread(View):
+    def get(self, request, *args, **kwargs):
+        form = MessageThreadForm()
+        context_dict = {'form': form}
+
+        return render(request, 'globe_templates/create_message_thread.html', context_dict)
+
+    def post(self, request, *args, **kwargs):
+        form = MessageThreadForm()
+
+        username = request.POST.get('username')
+
+        try:
+            receiver = User.objects.get(username=username)
+            if MessageThread.objects.filter(user=request.user, receiver=receiver).exists(): 
+                messageThread = MessageThread.objects.filter(user=request.user, receiver=receiver)[0]
+                return redirect('thread', pk=messageThread.pk)
+            elif MessageThread.objects.filter(user=receiver, receiver=request.user).exists():
+                messageThread = MessageThread.objects.filter(user=receiver, receiver=request.user)[0]
+                return redirect('thread', pk=messageThread.pk)
+            
+            if form.is_valid():
+                messageThread = MessageThread(user=request.user, receiver=receiver)
+                messageThread.save()
+                return redirect('thread', pk=messageThread.pk)
+        # if the user doesn't exist:
+        except:
+            return redirect('create_message_thread')
+

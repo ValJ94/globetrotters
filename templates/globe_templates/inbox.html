@@ -1,0 +1,45 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Inbox 
+{% endblock %}
+
+{% block content_block %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 p-5">
+            <h3>
+                Messages
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 p-5">
+            <form method="GET" action="{% url 'globe_app:create_message_thread' %}">
+                {% csrf_token %}
+                <button class="btn btn-light p-3" type="submit">
+                    Send a message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% for thread in messageThreads.all %}
+        <div class="row mb-3">
+            <div class="card col-md-12 p-5 shadow-sm">
+                <h5>
+                    {{ thread.user }} - {{ thread.receiver }}
+                </h5>
+                <a class="stretched-link" href="{% url 'thread' thread.pk %}"></a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

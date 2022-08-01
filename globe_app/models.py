@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+# from pytz import timezone
+from django.utils import timezone
 
 maxCharLength = 128
 
@@ -29,7 +31,7 @@ class UserProfile(models.Model):
 
 class Destination(models.Model):
     # must be related to the map API used somehow.
-    locationName = models.TextField(unique=True)
+    locationName = models.CharField(max_length=maxCharLength)
     longitude = models.FloatField(default=0.0)
     latitude = models.FloatField(default=0.0)
 
@@ -58,14 +60,18 @@ class TravelWishlist(models.Model):
     travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
 
 class UpcomingTravel(models.Model):
-    # owner = models.ForeignKey(UserProfile, default='', unique=False, on_delete=models.CASCADE)
     owner = models.CharField(null=False, max_length=maxCharLength, blank=False)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    # destination = models.CharField(max_length=maxCharLength)
     dateStart = models.DateField()
     dateEnd = models.DateField()
     budgetStart = models.DecimalField(max_digits=6, decimal_places=2)
     budgetEnd = models.DecimalField(max_digits=6, decimal_places=2)
+
+    DATE_FLEX_CHOICES = (
+        ('Y', 'Yes'),
+        ('N', 'No'),
+    )
+    dateFlexibility = models.CharField(max_length=2, choices=DATE_FLEX_CHOICES, blank=True)
     # travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE, blank=True)
 
 
@@ -85,3 +91,17 @@ class PostReply(models.Model):
     class Meta:
         verbose_name_plural = 'PostReplies'
 
+
+# Messaging Functionality
+
+class MessageThread(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Message(models.Model):
+    messageThread = models.ForeignKey('MessageThread', on_delete=models.CASCADE, blank = True, related_name='+')
+    messageSender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    messageReceiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    content = models.CharField(max_length=1000)
+    date = models.DateTimeField(default=timezone.now)
+    messageRead = models.BooleanField(default=False)

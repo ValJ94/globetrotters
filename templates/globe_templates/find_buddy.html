@@ -4,10 +4,47 @@
 
 
 {% block title_block %}
-    Find Buddy
+Find Buddy
 {% endblock %}
 
 {% block content_block %}
-    Buddy Test
+
+<div class="row">
+    <div class="col">
+        <div class="card card-body">
+            <form method="get">
+                {{ myFilter.form.as_p }}
+                {{ myUserFilter.form.as_p}}
+                <button class="btn btn-primary" type="submit">
+                    Search for Buddy
+                </button>
+            </form> 
+            <br /><br />
+            {% if trips %}
+                {% for trip in trips %}
+                <ul style="list-style-type: none;">
+                    <li>User: <a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></li>
+                    <li>Going to: {{ trip.destination }}</li>
+                    <li>From: {{ trip.dateStart }}</li>
+                    <li>To: {{ trip.dateEnd }}</li>
+                    <li>Budget from: £{{ trip.budgetStart }}</li>
+                    <li>Budget to: £{{ trip.budgetEnd }}</li><br /><br />
+                    <li>{{ trip.owner.age }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            <!-- {% for user in users %}
+                Gender: {{ user.gender }} <br />
+                Age: {{ user.age }}
+            {% endfor %} -->
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#id_dateStart").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#id_dateEnd").datepicker({ dateFormat: 'yy-mm-dd' });
+</script>
 
 {% endblock %}

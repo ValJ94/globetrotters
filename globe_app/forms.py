@@ -1,8 +1,8 @@
 from pyexpat import model
+from select import select
 from django import forms
 from globe_app.models import *
-from django.forms import ModelForm
-from django.contrib.admin.widgets import AdminDateWidget
+from django.forms import ChoiceField, ModelForm
 
 
 class ProfileForm(forms.ModelForm):
@@ -10,17 +10,25 @@ class ProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('first_name', 'middle_name', 'surname', 'age', 'description','picture', 'gender')
 
+        first_name = forms.CharField(required=True)
+        surname = forms.CharField(required=True)
+        age = forms.IntegerField(required=True)
+        gender = forms.CharField(required=True)
 
 class upcomingTravelForm(ModelForm):
     class Meta:
         model = UpcomingTravel
-        fields = ( 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
+        fields = ('dateStart', 'dateEnd', 'budgetStart', 'budgetEnd', 'dateFlexibility',)
 
+        dateFlexibility = forms.TypedChoiceField(initial='Yes')
+
+        
         labels = {
             'dateStart': '', 
             'dateEnd': '',
             'budgetStart': '',
             'budgetEnd': '',
+            'dateFlexibility': 'Are the dates flexible?',
         }
 
         widgets = {
@@ -37,3 +45,9 @@ class upcomingTravelForm(ModelForm):
                                                     'placeholder': 'Budget to (in GBP): ',
                                                     'id': 'budget_end'}),
         }
+
+
+class MessageThreadForm(forms.Form):
+    username = forms.CharField(label='', max_length=100)
+
+

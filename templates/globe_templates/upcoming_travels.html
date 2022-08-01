@@ -14,7 +14,7 @@ Upcoming Travels
 
 
 <!-- Mapbox API (Mapbox.com) -->
-<div id="map"></div>
+<!-- <div id="map"></div> -->
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -98,6 +98,7 @@ Upcoming Travels
                 <li>Trip ends: {{ trip.dateEnd }}</li>
                 <li>Budget lower range: £{{ trip.budgetStart }}</li>
                 <li>Budget higher range: £{{ trip.budgetEnd }}</li>
+                <li>Date flexibility: {{ trip.dateFlexibility }}</li>
             </p>
         </div>
     {% endfor %}

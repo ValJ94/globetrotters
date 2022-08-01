@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'globe_app',
     'registration',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
