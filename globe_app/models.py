@@ -105,3 +105,11 @@ class Message(models.Model):
     content = models.CharField(max_length=1000)
     date = models.DateTimeField(default=timezone.now)
     messageRead = models.BooleanField(default=False)
+
+# class Notification(models.Model):
+#     # types: 1 = message
+#     type = models.IntegerField()
+#     to_user = models.ForeignKey(User, related_name='notification_to', on_delete=models.CASCADE, null=True)
+#     from_user = models.ForeignKey(User, related_name='notification_from', on_delete=models.CASCADE, null=True)
+#     date = models.DateTimeField(default=timezone.now)
+#     user_has_seen = models.BooleanField(default=False)

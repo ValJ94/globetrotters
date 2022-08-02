@@ -19,8 +19,9 @@ urlpatterns = [
     path('get_user_saved_locations/<user>/', views.get_user_saved_locations, name='get_user_saved_locations'),
     path('add_upcoming_travel/', views.add_upcoming_travel, name='add_upcoming_travel'),
     path('buddy_search_results/', views.buddy_search_results, name='buddy_search_results'),
-    path('inbox/', views.ListThreads.as_view(), name='inbox'),
-    path('inbox/create_message_thread/', views.CreateThread.as_view(), name='create_message_thread'),
-
+    path('inbox/', views.list_threads, name='inbox'),
+    path('inbox/create_thread/', views.CreateThread.as_view(), name='create_thread'),
+    path('inbox/<int:pk>/', views.thread_view, name='thread'),
+    path('inbox/<int:pk>/create_message/', views.create_message, name='create_message'),
 
 ]

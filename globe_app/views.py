@@ -2,7 +2,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Message, UserProfile, UpcomingTravel, Destination, MessageThread
-from .forms import MessageThreadForm, ProfileForm, upcomingTravelForm
+from .forms import MessageForm, MessageThreadForm, ProfileForm, upcomingTravelForm, MessageForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -188,24 +188,23 @@ def buddy_search_results(request):
         return render(request, 'globe_templates/buddy_search_results.html')
 
 # Messaging
-class ListThreads(View):
-    def get(self, request, *args, **kwargs):
-        messageThreads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+def list_threads(request):
+    threads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
 
-        context_dict = {'messageThreads': messageThreads}
+    context_dict = {'threads': threads}
 
-        return render(request, 'globe_templates/inbox.html', context_dict)
+    return render(request, 'globe_templates/inbox.html', context_dict)
 
 
 class CreateThread(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = MessageThreadForm()
         context_dict = {'form': form}
 
-        return render(request, 'globe_templates/create_message_thread.html', context_dict)
+        return render(request, 'globe_templates/create_thread.html', context_dict)
 
-    def post(self, request, *args, **kwargs):
-        form = MessageThreadForm()
+    def post(self, request):
+        form = MessageThreadForm(request.POST)
 
         username = request.POST.get('username')
 
@@ -213,16 +212,78 @@ class CreateThread(View):
             receiver = User.objects.get(username=username)
             if MessageThread.objects.filter(user=request.user, receiver=receiver).exists(): 
                 messageThread = MessageThread.objects.filter(user=request.user, receiver=receiver)[0]
-                return redirect('thread', pk=messageThread.pk)
+                return redirect('globe_app:thread', pk=messageThread.pk)
             elif MessageThread.objects.filter(user=receiver, receiver=request.user).exists():
                 messageThread = MessageThread.objects.filter(user=receiver, receiver=request.user)[0]
-                return redirect('thread', pk=messageThread.pk)
+                return redirect('globe_app:thread', pk=messageThread.pk)
             
             if form.is_valid():
                 messageThread = MessageThread(user=request.user, receiver=receiver)
                 messageThread.save()
-                return redirect('thread', pk=messageThread.pk)
+                return redirect('globe_app:thread', pk=messageThread.pk)
         # if the user doesn't exist:
         except:
-            return redirect('create_message_thread')
+            return redirect('globe_app:create_thread')
 
+
+def thread_view(request, pk):
+    # get method
+    form = MessageForm()
+    thread = MessageThread.objects.get(pk=pk) # the thread we'll show on screen
+    messageList = Message.objects.filter(messageThread__pk__contains=pk)
+
+    # Get the messages from the messageList that belong to the TO user who's requesting them
+    # Check whichever are unread and change their status to True (Since after you retrieve them the user has read them)
+    # messageToList = 
+
+    # for message in messageToList:
+        # if not message:
+            # message = True
+            # message.save()
+
+    context_dict = {'thread': thread, 'form': form, 'messageList': messageList}
+
+    return render(request, 'globe_templates/thread.html', context_dict)
+
+
+def create_message(request, pk):
+    # Just one POST method
+    thread = MessageThread.objects.get(pk=pk)
+
+    # Make sure we have the right user
+    if thread.receiver == request.user:
+        receiver = thread.user
+    else:
+        receiver = thread.receiver
+    
+    message = Message(messageThread = thread, 
+                    messageSender=request.user,
+                    messageReceiver=receiver,
+                    content=request.POST.get('message'))
+    
+    message.save()
+
+    # notification = Notification.objects.create(type = 1,
+    #                                             from_user=request.user,
+    #                                             to_user=receiver,
+    #                                             thread=thread)
+    # go back to the url
+    return redirect('globe_app:thread', pk=pk)
+
+
+
+# Notifications
+
+# def thread_notification(request, notification_pk, object_pk):
+#     notification = Notification.objects.get(pk=notification_pk)
+#     thread = MessageThread.objects.get(pk=object_pk)
+
+#     notification.user_has_seen = True
+#     notification.save()
+
+#     return redirect('globe_app:thread', pk=object_pk)
+
+# def remove_notification(request, notification_pk):
+#     notification = Notification.objects.get(pk=notification_pk)
+
+#     notification.user_has_seen = True

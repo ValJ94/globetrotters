@@ -1,0 +1,72 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Message Thread 
+{% endblock %}
+
+{% block content_block %}
+<!-- Header for the users in the messages -->
+<div class="container">
+    <div class="row">
+        <div class="card col-md-12 mt-5 p-3 shadow-sm">
+            {% if thread.receiver == request.user %}
+                <h5>
+                    @{{ thread.user }}
+                </h5>
+            {% else %}
+                <h5>
+                    @{{ thread.receiver }}
+                </h5>
+            {% endif %}
+        </div>
+    </div>
+    <!-- List to all the messages -->
+    {% if messageList.all.count == 0 %}
+        <div class="row my-5">
+            <div class="col-md-12">
+                <p>There are no messages</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for message in messageList %}
+        <div class="row">
+            <div class="col-md-12 my-1">
+                {% if message.messageSender == request.user %}
+                    <!-- Create some style here for the messages (differentiate between sender and receiver) -->
+                    <div>
+                        <p>
+                            {{ message.content }}
+                        </p>
+                    </div>
+                {% elif message.messageReceiver == request.user %}
+                    <div>
+                        <p>
+                            {{ message.content }}
+                        </p>
+                    </div>
+
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+<!-- Form to submit new message -->
+    <div class="row">
+        <div class="card col-md-12 p-3 shadow-sm">
+            <form method="POST" action="{% url 'globe_app:create_message' thread.pk %}">
+                {% csrf_token %}
+                {{ form }}
+
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-light" type="submit">Send messages</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

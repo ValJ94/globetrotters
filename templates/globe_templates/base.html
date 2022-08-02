@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load globe_template_tags %}
 
 <!-- basic settings -->
 <html lang="en">
@@ -80,7 +81,7 @@
                     <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                         {% if user.is_authenticated %}
                         <div class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'globe_app:inbox' %}">Inbox</a>
+                            <a class="nav-link active" aria-current="page" href="{% url 'globe_app:inbox' %}">Inbox {% if user.id|get_notification_count > 0 %} ({{ user.id|get_notification_count }}) {% endif %}</a>
                         </div>
 
                         <li class="nav-item dropdown">
