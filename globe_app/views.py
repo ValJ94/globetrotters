@@ -55,10 +55,6 @@ def profile(request, username):
     return render(request,  'globe_templates/user_profile.html', context_dict)
 
 
-def forum(request):
-    context_dict = {}
-    return render(request, 'globe_templates/forum.html', context_dict)
-
 def about(request):
     context_dict = {}
     return render(request, 'globe_templates/about.html', context_dict)
@@ -154,25 +150,12 @@ def get_user_saved_locations(request, user):
 def find_buddy(request):
     myFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all())
     myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
-    # myUsernameFilter = UsernameFilter(request.GET, queryset=User.objects.all())
-
-
 
     trips = myFilter.qs
-    # tripsList = [trip.owner for trip in trips]
-    # users = [User.objects.get(username=user) for user in tripsList]
-    # print(users)
     users = myUserFilter.qs
-    # usernames = myUsernameFilter.qs
-
-    # owner = (User.username == UpcomingTravel.owner)
-
 
     context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 
                     'trips': trips, 'users': users, }
-    # context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 'myUsernameFilter': myUsernameFilter, 
-    #                 'trips': trips, 'users': users, 'usernames': usernames}
-
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 

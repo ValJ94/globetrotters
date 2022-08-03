@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Globetrotter Add Post
+{% endblock %}
+
+{% block content_block %}
+<div class="container">
+    <div class="row">
+        <form role="form" id="post_form" method="post"
+        action="{% url 'forum_app:add_post' %}">
+            {{form.as_p}}
+            {% csrf_token %}
+
+            <button class="btn btn-light">
+                Add Post
+            </button> <br />
+            <a href="{% url 'forum_app:forum' %}">Back to Forum</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
