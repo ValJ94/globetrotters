@@ -10,42 +10,25 @@
 {% block content_block %}
     <h4>{{ post.title }}</h4> <br/>
     <h5>Posted by <a href="{% url 'globe_app:profile' post.writer %}">{{ post.writer }}</a></h5>
-    <br />
+    <strong>{{ post.timestamp }}</strong>
+    <br /><br />
 
     <h6>{{ post.content }}</h6> <br />
-    Posted: {{ post.timestamp }}
     <br />
 
-<!-- If authenticated, show reply box! -->
-
-{% if user.is_authenticated %}
-
-<div class="container">
-    <div class="row">
-        <form role="form" method="post"
-        action="/forum/{{ post.id }}">
-            {{ form.as_p }}
-            {% csrf_token %}
-
-            <button class="btn btn-light">
-                Send reply
-            </button> <br />
-        </form>
-    </div>
-</div>
-<br/><br/><br/>     
-{% endif %}
-
+    <a href="{% url 'forum_app:add_reply' post.id %}">Reply to post</a>
+    <br/> <br/> 
     <h4>Replies</h4>
-{% if post_replies %}
-    {% for reply in post_replies %}
-        Reply: {{ reply.content }} <br/> 
-        Posted by: <a href="{% url 'globe_app:profile' reply.reply_writer %}">{{ reply.reply_writer }}</a><br/> 
-        Posted on: {{ reply.timestamp }}<br/> <br/> 
-    {% endfor %}
-{% endif %}
-<br />
-<a href="{% url 'forum_app:forum' %}">Back to Forum</a>
+    {% if post_replies %}
+        {% for reply in post_replies %}
+            <strong><a href="{% url 'globe_app:profile' reply.reply_writer %}">{{ reply.reply_writer }}</a>,
+            {{ reply.timestamp }}<br/> <br/> </strong>
+            {{ reply.content }} <br/> <br/> <br/> 
+        {% endfor %}
+    {% endif %}
+    <br />
+
+    <a href="{% url 'forum_app:forum' %}">Back to Forum</a>
 <br />
 
 {% endblock %}

@@ -50,5 +50,16 @@ class upcomingTravelForm(ModelForm):
 class MessageThreadForm(forms.Form):
     username = forms.CharField(label='', max_length=100)
 
-class MessageForm(forms.Form):
-    message = forms.CharField(label='', max_length=1000)
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('content', )
+        
+        labels = {
+            'content': '', 
+        }
+
+        widgets = {
+            'message': forms.Textarea(attrs={'class':'form-control, col-xs-2', 
+                                                'placeholder': 'Write here',}), 
+        }

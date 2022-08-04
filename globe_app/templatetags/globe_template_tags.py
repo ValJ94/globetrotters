@@ -14,10 +14,10 @@ register = template.Library()
 
 @register.filter
 def get_notification_count(userID):
-    print('test1')
+    # print('test1')
     # notificationss = Notification.objects.filter(to_user=userID).exclude(user_has_seen=True)
     unread_messages = Message.objects.filter(messageReceiver=userID).exclude(messageRead=True)
-    print(unread_messages)
+    # print(unread_messages)
     # print(notifications)
     return len(unread_messages)
 

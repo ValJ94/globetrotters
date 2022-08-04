@@ -23,4 +23,7 @@ urlpatterns = [
     path('inbox/<int:pk>/', views.thread_view, name='thread'),
     path('inbox/<int:pk>/create_message/', views.create_message, name='create_message'),
 
+    # New ones for contacting new buddy
+    path('inbox/<username>/create_or_find_message_thread/<receiver>/', views.create_or_find_message_thread, name='create_or_find_message_thread'),
+
 ]

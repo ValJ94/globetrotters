@@ -17,10 +17,11 @@
             <li class="list-group-item">
                 <a href="/forum/{{ post.id }}">
                     <div>
-                        {{ post.title }}
+                        {{ post.title }} 
                     </div>
                 </a>
             </li>
+            <ul style="list-style-type: none;"><li>{{ post.owner }}</li>{{ post.timestamp}} </ul>
         {% endfor %}
     {% endif %}
 

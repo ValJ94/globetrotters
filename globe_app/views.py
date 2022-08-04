@@ -148,10 +148,10 @@ def get_user_saved_locations(request, user):
 
 
 def find_buddy(request):
-    myFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all())
+    myFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all().order_by('-destination'))
     myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
 
-    trips = myFilter.qs
+    trips = myFilter.qs.order_by('-destination')
     users = myUserFilter.qs
 
     context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 
@@ -210,10 +210,13 @@ class CreateThread(View):
 
 
 def thread_view(request, pk):
+    print(pk)
     # get method
     form = MessageForm()
     thread = MessageThread.objects.get(pk=pk) # the thread we'll show on screen
     messageList = Message.objects.filter(messageThread__pk__contains=pk)
+
+    print(pk)
 
     # Get the messages from the messageList that belong to the TO user who's requesting them
     # Check whichever are unread and change their status to True (Since after you retrieve them the user has read them)
@@ -239,12 +242,12 @@ def create_message(request, pk):
     else:
         receiver = thread.receiver
     
-    message = Message(messageThread = thread, 
+    content = Message(messageThread = thread, 
                     messageSender=request.user,
                     messageReceiver=receiver,
-                    content=request.POST.get('message'))
+                    content=request.POST.get('content'))
     
-    message.save()
+    content.save()
 
     # notification = Notification.objects.create(type = 1,
     #                                             from_user=request.user,
@@ -270,3 +273,25 @@ def create_message(request, pk):
 #     notification = Notification.objects.get(pk=notification_pk)
 
 #     notification.user_has_seen = True
+
+
+
+# NEW
+def create_or_find_message_thread(request, username, receiver):
+    
+    print(username)
+    print(receiver)
+
+    senderObject = User.objects.get(username=username)
+    try:
+        receiverObject = User.objects.get(username=receiver)
+    except Exception as e:
+        print('User probably doesnt exist')
+        return redirect(f'/globetrotters/find_buddy/')
+
+    messageThread = MessageThread.objects.get_or_create(user=senderObject, receiver=receiverObject)
+    print(messageThread)
+    # (<MessageThread: MessageThread object (5)>, False)
+    return redirect(f'/globetrotters/inbox/{messageThread[0].pk}/')
+
+

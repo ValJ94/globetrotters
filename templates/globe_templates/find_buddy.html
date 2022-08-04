@@ -24,14 +24,15 @@ Find Buddy
                 {% for trip in trips %}
                 <ul style="list-style-type: none;">
                     <li>User: <a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></li>
+                    <li><a href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Contact {{ trip.owner }}</a></li>
                     <li>Going to: {{ trip.destination }}</li>
                     <li>From: {{ trip.dateStart }}</li>
                     <li>To: {{ trip.dateEnd }}</li>
                     <li>Budget from: £{{ trip.budgetStart }}</li>
                     <li>Budget to: £{{ trip.budgetEnd }}</li><br /><br />
                     <li>{{ trip.owner.age }}</li>
-                {% endfor %}
                 </ul>
+                {% endfor %}
             {% endif %}
             <!-- {% for user in users %}
                 Gender: {{ user.gender }} <br />

@@ -101,7 +101,7 @@ class Message(models.Model):
     messageThread = models.ForeignKey('MessageThread', on_delete=models.CASCADE, blank = True, related_name='+')
     messageSender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     messageReceiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-    content = models.CharField(max_length=1000)
+    content = models.TextField(max_length=1000)
     date = models.DateTimeField(default=timezone.now)
     messageRead = models.BooleanField(default=False)
 
