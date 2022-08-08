@@ -41,20 +41,23 @@ class TravelNote(models.Model):
     # owner = models.ForeignKey(User)
     content = models.TextField(blank=True)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, blank=True)
-    travelPics = models.ImageField(upload_to="travelPics", blank=True)
+    # travelPics = models.ImageField(upload_to="travelPics", blank=True)
+
+    def __str__(self):
+        return self.content
 
 
 class TravelHistory(models.Model):
-    # owner = models.ForeignKey(User)
+    owner = models.CharField(null=False, max_length=maxCharLength, blank=False)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     travelPics = models.ImageField(upload_to="travelPics", blank=True)
-    travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE, blank=True)
+    travelNotes = models.TextField(blank=True)
 
     class Meta:
-        verbose_name_plural = 'TravelHistories'
+        verbose_name_plural = 'Travel Histories'
     
 class TravelWishlist(models.Model):
-    # owner = models.ForeignKey(User)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
 
@@ -104,6 +107,9 @@ class Message(models.Model):
     content = models.TextField(max_length=1000)
     date = models.DateTimeField(default=timezone.now)
     messageRead = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "from: " + self.messageSender.username + " to:" + self.messageReceiver.username + " messageRead: " + str(self.messageRead)
 
 # class Notification(models.Model):
 #     # types: 1 = message

@@ -2,21 +2,23 @@ let csrfToken = document.cookie.split('=')[1];
 
 function createThread() {
     $(document).ready(function() {
-        $.ajax({
-            type: "GET",
-            url: "{% url 'globe_app: create_message_thread' user %}",
+        $('#save_history')({
+            type: "POST",
+            url: "{% url 'globe_app:save_history' %}",
             headers: { 'X-CSRFToken': csrfToken },
+            data: {
+                'latitude': latitude,
+                'longitude': longitude,
+                'locationFullName': locationFullName,
+                'owner': owner,
+                'travelPics': travelPics,
+                'travelNotes': travelNotes,
+                'noteContent': content,
+
+            },
+            // success and error are callbacks. They notify when the request is done.
             success: function (response) {
                 console.log(response);
-                receiver = User.objects.get(username=username);
-                if(MessageThread.objects.filter(user=request.user, receiver=receiver).exists()) {
-                    messageThread = MessageThread.objects.filter(user=request.user, receiver=receiver)[0];
-                    return redirect('globe_app:thread', pk=messageThread.pk)
-                } else if(MessageThread.objects.filter(user=receiver, receiver=request.user).exists()) {
-                    messageThread = MessageThread.objects.filter(user=receiver, receiver=request.user)[0];
-                    return redirect('globe_app:thread', pk=messageThread.pk)
-                };
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('failed');

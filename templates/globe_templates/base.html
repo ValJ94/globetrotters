@@ -61,9 +61,9 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'globe_app:upcoming_travels' user.username %}">Upcoming
                                         Travels</a></li>
-                                <li><a class="dropdown-item" href="{% url 'globe_app:travel_history' %}">Travel
+                                <li><a class="dropdown-item" href="{% url 'globe_app:travel_history' user.username %}">Travel
                                         History</a></li>
-                                <li><a class="dropdown-item" href="{% url 'globe_app:travel_wishlist' %}">Travel
+                                <li><a class="dropdown-item" href="{% url 'globe_app:travel_wishlist' user.username %}">Travel
                                         Wishlist</a></li>
                                 <li><a class="dropdown-item" href="{% url 'globe_app:travel_notes' %}">Travel Notes</a>
                                 </li>

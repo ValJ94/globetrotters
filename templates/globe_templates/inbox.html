@@ -28,14 +28,14 @@
         </div>
     </div>
 
-    {% for thread in threads.all %}
+    {% for threadObject in threadList %}
         <div class="row mb-3">
             <div class="card col-md-12 p-5 shadow-sm">
                 <h5>
-                    {{ thread.user }} - {{ thread.receiver }}
+                    {{ threadObject.thread.user }} - {{ threadObject.thread.receiver }} (Unread Messages: {{ threadObject.messages.unreadMessages }})
                 </h5>
                 <!-- haven't created thread link yet -->
-                <a class="stretched-link" href="{% url 'globe_app:thread' thread.pk %}"></a>
+                <a class="stretched-link" href="{% url 'globe_app:thread' threadObject.thread.pk %}"></a>
             </div>
         </div>
     {% endfor %}

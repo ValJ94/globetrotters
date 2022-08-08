@@ -1,8 +1,8 @@
 from pyexpat import model
 from select import select
 from django import forms
-from globe_app.models import *
-from django.forms import ChoiceField, ModelForm
+from globe_app.models import UserProfile, UpcomingTravel, Message, TravelHistory
+from django.forms import  ModelForm
 
 
 class ProfileForm(forms.ModelForm):
@@ -45,6 +45,27 @@ class upcomingTravelForm(ModelForm):
                                                     'placeholder': 'Budget to (in GBP): ',
                                                     'id': 'budget_end'}),
         }
+
+
+class TravelHistoryForm(ModelForm):
+    class Meta:
+        model = TravelHistory
+        fields = ('travelPics', 'travelNotes')
+
+        labels = {
+            'travelPics': '', 
+            'travelNotes': '',
+        }
+
+        widgets = {
+            'travelPics': forms.FileInput(attrs={'class':'form-control, col-xs-2', 
+                                                'placeholder': 'Upload travel pictures', 
+                                                'id': 'travel_pic',}), # form-control is bootstrap
+            'travelNotes': forms.Textarea(attrs={'class':'form-control, col-xs-3', 
+                                                'placeholder': 'Write some notes on the destination', 
+                                                'id': 'travel_note'}),
+        }
+
 
 
 class MessageThreadForm(forms.Form):

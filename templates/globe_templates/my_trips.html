@@ -8,6 +8,13 @@
 {% endblock %}
 
 {% block content_block %}
-    My Trips Test
+    <h4>{{ user.username }}'s Trips</h4> <br/><br/>
+
+    <a href="{% url 'globe_app:upcoming_travels' user.username %}">Upcoming Travels</a>
+    <hr/>
+    <a href="{% url 'globe_app:travel_history' user.username %}">Travel History</a>
+    <hr/>
+    <a href="{% url 'globe_app:travel_wishlist' user.username %}">Travel Wishlist</a>
+    <hr/>
 
 {% endblock %}

@@ -21,6 +21,7 @@ Find Buddy
             </form> 
             <br /><br />
             {% if trips %}
+                <h4>Current trips</h4>
                 {% for trip in trips %}
                 <ul style="list-style-type: none;">
                     <li>User: <a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></li>
@@ -33,6 +34,8 @@ Find Buddy
                     <li>{{ trip.owner.age }}</li>
                 </ul>
                 {% endfor %}
+            {% else %}
+                There are currently no trips planned
             {% endif %}
             <!-- {% for user in users %}
                 Gender: {{ user.gender }} <br />

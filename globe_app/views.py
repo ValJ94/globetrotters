@@ -1,8 +1,8 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Message, UserProfile, UpcomingTravel, Destination, MessageThread
-from .forms import MessageForm, MessageThreadForm, ProfileForm, upcomingTravelForm, MessageForm
+from .models import Message, TravelHistory, UserProfile, UpcomingTravel, Destination, MessageThread
+from .forms import MessageForm, MessageThreadForm, ProfileForm, upcomingTravelForm, MessageForm, TravelHistoryForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -59,6 +59,10 @@ def about(request):
     context_dict = {}
     return render(request, 'globe_templates/about.html', context_dict)
 
+
+# UPCOMING TRAVELS
+
+
 def upcoming_travels(request, owner):
     upcoming_data = UpcomingTravel.objects.filter(owner=owner)
     # upcoming_data = UpcomingTravel.objects.all()
@@ -67,24 +71,6 @@ def upcoming_travels(request, owner):
 
     return render(request, 'globe_templates/upcoming_travels.html', context_dict)
 
-def travel_history(request):
-    context_dict = {}
-    return render(request, 'globe_templates/travel_history.html', context_dict)
-
-def travel_wishlist(request):
-    context_dict = {}
-    return render(request, 'globe_templates/travel_wishlist.html', context_dict)
-
-def travel_notes(request):
-    context_dict = {}
-    return render(request, 'globe_templates/travel_notes.html', context_dict)
-
-def my_trips(request):
-    context_dict = {}
-    return render(request, 'globe_templates/my_trips.html', context_dict)
-
-# add location template
-# def add_location(request):
 def add_upcoming_travel(request):
     upcoming_form = upcomingTravelForm()
     
@@ -117,6 +103,7 @@ def save_location(request):
     else:
         pass
 
+    # if locationObject:
     locationObject, created = UpcomingTravel.objects.get_or_create(
         destination = destinationObject,
         dateStart = request.POST['dateStart'],
@@ -124,27 +111,115 @@ def save_location(request):
         budgetStart = request.POST['budgetStart'],
         budgetEnd = request.POST['budgetEnd'],
         owner = request.POST['owner'],
-    )
-
+        )
 
     return JsonResponse({'message':'Location saved'})
     # return redirect(f'/globetrotters/upcoming_travels/{request.POST["owner"]}')
 
 
-# get the coordinates to show the locations on the map
+# get the coordinates to show the locations on the maps
 def get_user_saved_locations(request, user):
     # owner = request.POST['user']
     print('Getting the locations now')
 
     # locationObjects = Destination.objects.all()
-    locationObjects = UpcomingTravel.objects.filter(owner=user)
+    locationObjects = UpcomingTravel.objects.filter(owner=user) # for upcoming travels
+    # historyLocationObjects = TravelHistory.objects.filter(owner=user) # for travel history
 
     lngLatList = [(record.destination.longitude, record.destination.latitude) for record in locationObjects]
     print(lngLatList)
+    # historylngLatList = [(record.destination.longitude, record.destination.latitude) for record in historyLocationObjects]
+    # print(historylngLatList)
     # lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
 
     # The below coordinates will be retrieved by the user's saved locations model
+    # return JsonResponse({'locationList': lngLatList}, {'historyLocationList': historylngLatList})
     return JsonResponse({'locationList': lngLatList})
+
+
+
+# TRAVEL HISTORY
+
+
+
+def travel_history(request, owner):
+    history_data = TravelHistory.objects.filter(owner=owner)
+
+    context_dict = {'historyList': history_data}
+    return render(request, 'globe_templates/travel_history.html', context_dict)
+
+
+def add_history(request):
+    history_form = TravelHistoryForm()
+    
+    if request.method == 'POST':
+        history_form = TravelHistoryForm(request.POST, request.FILES)
+
+        if history_form.is_valid():
+            history_form.save(commit=True)
+            return redirect(f'/globetrotters/travel_history/{request.POST["owner"]}')
+            # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
+        else:
+            print(history_form.errors)
+
+    context_dict = {'form': history_form,}
+
+    return render(request, 'globe_templates/add_history.html', context_dict)
+
+# save a location to the map
+def save_history_location(request):
+    print(request.POST)
+    destinationObject, created = Destination.objects.get_or_create(
+        locationName = request.POST['locationFullName']
+    )
+
+# in case of adding new fields, you don't want to have copies of the same data
+    if created:
+        destinationObject.latitude = request.POST['latitude']
+        destinationObject.longitude = request.POST['longitude']
+        destinationObject.save()
+    else:
+        pass
+
+    # if locationObject:
+    historyLocationObject, created = TravelHistory.objects.get_or_create(
+        destination = destinationObject,
+        owner = request.POST['owner'],
+        travelPics = request.POST['travelPics'],
+        travelNotes = request.POST['noteContent'],
+    )
+
+    return JsonResponse({'message':'Location saved'})
+
+def get_user_saved_history_locations(request, user):
+    print('Getting the locations now')
+
+    historyLocationObject = TravelHistory.objects.filter(owner=user) # for upcoming travels
+
+    lngLatList = [(record.destination.longitude, record.destination.latitude) for record in historyLocationObject]
+    print(lngLatList)
+
+    return JsonResponse({'locationHistoryList': lngLatList})
+
+
+
+
+
+
+def travel_wishlist(request, owner):
+    wishlist_data = TravelHistory.objects.filter(owner=owner)
+
+    context_dict = {'wishlistList': wishlist_data}
+    return render(request, 'globe_templates/travel_wishlist.html', context_dict)
+
+def travel_notes(request):
+    context_dict = {}
+    return render(request, 'globe_templates/travel_notes.html', context_dict)
+
+def my_trips(request):
+    context_dict = {}
+    return render(request, 'globe_templates/my_trips.html', context_dict)
+
 
 
 def find_buddy(request):
@@ -173,8 +248,21 @@ def buddy_search_results(request):
 # Messaging
 def list_threads(request):
     threads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+    
+    threadList = []
+    for thread in threads:
+        threadMessages = Message.objects.filter(messageThread=thread)
+        unreadThreadMessages = Message.objects.filter(messageThread=thread, messageRead=False, messageReceiver=thread.user)
+        threadList.append({
+            "thread": thread,
+            "messages": {
+                # "totalMessages": len(threadMessages), # here for testing 
+                "unreadMessages": len(unreadThreadMessages)
+            }
+        })
 
-    context_dict = {'threads': threads}
+    # context_dict = {'threads': threads}
+    context_dict = {'threadList': threadList}
 
     return render(request, 'globe_templates/inbox.html', context_dict)
 
@@ -217,15 +305,23 @@ def thread_view(request, pk):
     messageList = Message.objects.filter(messageThread__pk__contains=pk)
 
     print(pk)
+    print(thread.user.username)
 
     # Get the messages from the messageList that belong to the TO user who's requesting them
     # Check whichever are unread and change their status to True (Since after you retrieve them the user has read them)
-    # messageToList = 
+    # messageToList = [message for message in messageList if message.messageReceiver == thread.user]
+    
+    messageToList = []
+    for message in messageList:
+        if message.messageReceiver == thread.user:
+            messageToList.append(message)
 
-    # for message in messageToList:
-        # if not message:
-            # message = True
-            # message.save()
+    for message in messageToList:
+        if not message.messageRead:
+            message.messageRead = True
+            message.save()
+
+    []
 
     context_dict = {'thread': thread, 'form': form, 'messageList': messageList}
 
@@ -293,5 +389,3 @@ def create_or_find_message_thread(request, username, receiver):
     print(messageThread)
     # (<MessageThread: MessageThread object (5)>, False)
     return redirect(f'/globetrotters/inbox/{messageThread[0].pk}/')
-
-

@@ -26,34 +26,6 @@ Upcoming Travels
         zoom: 0.75
     });
 
-    // Search box for locations (countries, cities, addresses etc)
-    // let myMap = savedMap.addControl(
-    //     new MapboxGeocoder({
-    //         accessToken: mapboxgl.accessToken,
-    //         mapboxgl: mapboxgl,
-    //     })
-    // );
-
-    // console.log(myMap);
-
-    // Tags for locations (upcoming travel, travel history, and travel wishlist)
-    // const upcoming = new mapboxgl.Marker({ color: 'red' })
-    //     .setLngLat([13, 13])
-    //     .addTo(map);
-
-    // const history = new mapboxgl.Marker({ rotation: -45 })
-    //     .setLngLat([12.554729, 55.70651])
-    //     .addTo(map);
-
-    // const wishlist = new mapboxgl.Marker({ color: 'green', rotation: 45 })
-    //     .setLngLat([12.65147, 55.608166])
-    //     .addTo(map);
-
-    // const marker4 = new mapboxgl.Marker({ color: 'green', rotation: 45 })
-    //     .setLngLat([16.65147, 55.608166])
-    //     .addTo(map);
-
-
     function getLocations() {
 
         let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
