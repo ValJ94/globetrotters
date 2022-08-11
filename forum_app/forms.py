@@ -34,6 +34,6 @@ class PostReplyForm(forms.ModelForm):
     
         widgets = {
                     'content': forms.Textarea(attrs={'class':'form-control, col-xs-3', 
-                                                        'placeholder': 'Write reply', 
+                                                        'placeholder': 'Write comment', 
                                                         'id': 'post_reply'}),
                 }

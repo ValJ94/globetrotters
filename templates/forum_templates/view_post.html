@@ -8,27 +8,49 @@
 {% endblock %}
 
 {% block content_block %}
-    <h4>{{ post.title }}</h4> <br/>
-    <h5>Posted by <a href="{% url 'globe_app:profile' post.writer %}">{{ post.writer }}</a></h5>
-    <strong>{{ post.timestamp }}</strong>
-    <br /><br />
 
-    <h6>{{ post.content }}</h6> <br />
-    <br />
 
-    <a href="{% url 'forum_app:add_reply' post.id %}">Reply to post</a>
-    <br/> <br/> 
-    <h4>Replies</h4>
-    {% if post_replies %}
-        {% for reply in post_replies %}
-            <strong><a href="{% url 'globe_app:profile' reply.reply_writer %}">{{ reply.reply_writer }}</a>,
-            {{ reply.timestamp }}<br/> <br/> </strong>
-            {{ reply.content }} <br/> <br/> <br/> 
-        {% endfor %}
-    {% endif %}
-    <br />
 
-    <a href="{% url 'forum_app:forum' %}">Back to Forum</a>
-<br />
+
+
+<div class="container_green"><br/>
+    <div class="row mb-3 justify-content-center">
+        <div class="card col-10 text-center p-3 shadow-sm ">
+            <h4 class="card-header text-center col-12 text-center">
+                {{ post.title }}<br/></h4>
+                <a href="{% url 'globe_app:profile' post.writer %}">{{ post.writer }}</a>{{ post.timestamp }}<br/>
+                <br/><div class="card text-center col-12 p-1 shadow-sm">
+                <p class="card-text">
+                    <h5>{{ post.content }}</h5>
+                </p>
+            </div>
+        </div>
+    </div> 
+    <a href="{% url 'forum_app:add_reply' post.id %}" class="btn btn-success" 
+        role="button" aria-pressed="true">Add Comment</a> <br/><br/>
+
+
+    <center><strong>Comments</strong></center>
+    <div class="row mb-3 justify-content-center">
+        <div class="card col-6 text-center p-3 shadow-sm ">
+        {% if post_replies %}
+            {% for reply in post_replies %}
+            <div class="card">
+                <strong><a href="{% url 'globe_app:profile' reply.reply_writer %}">{{ reply.reply_writer }}</a>,
+                    {{ reply.timestamp }}<br/> <br/> </strong>
+                    <p class="card-text">
+                        {{ reply.content }} <br/> <br/> 
+                    </p> 
+            </div><br/>
+            {% endfor %}
+        {% else %}
+            There are no comments for this post.
+        {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'forum_app:forum' %}" class="btn btn-success" role="button">
+        Back to Forum</a><br />
+        <br /><br />
+</div>
 
 {% endblock %}

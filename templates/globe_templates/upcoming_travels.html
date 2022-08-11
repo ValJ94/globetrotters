@@ -9,12 +9,15 @@ Upcoming Travels
 {% endblock %}
 
 {% block content_block %}
-<h2>Upcoming Travels</h2>
-<strong><a class="nav-link active" href="{% url 'globe_app:add_upcoming_travel' %}">Add New Location</a></strong>
-
 
 <!-- Mapbox API (Mapbox.com) -->
-<!-- <div id="map"></div> -->
+
+<div class="container_green">
+    <br/><h2>Upcoming Trips</h2><br/>
+    <a class="btn btn-success" role="button" href="{% url 'globe_app:add_upcoming_travel' %}">Add New Trip</a>
+    <div id="map"></div>
+</div>
+
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -38,7 +41,7 @@ Upcoming Travels
             success: function (response) {
                 console.log(response);
                 response.locationList.forEach(element => {
-                    new mapboxgl.Marker({ color: 'red' })
+                    new mapboxgl.Marker({ color: '#8fd5a6' })
                         .setLngLat([element[0], element[1]])
                         .addTo(savedMap)
                 });
@@ -59,22 +62,29 @@ Upcoming Travels
 {% endblock %}
 
 {% block white_content_block %}
-
-<div class="card">
-    {% for trip in upcomingList %}
-        <h5 class="card-header text-center"><strong>{{ trip.destination }}</strong></h5>
-        <div class="card-body text-center">
-            <!-- <h5 class="card-title">{{ trip.destination }}</h5> -->
-            <ul style="list-style-type: none;">
-                <p class="card-text">
-                    <li>Trip starts: <strong>{{ trip.dateStart }}</strong></li>
-                    <li>Trip ends: <strong>{{ trip.dateEnd }}</strong></li>
-                    <li>Budget lower range: <strong>£{{ trip.budgetStart }}</strong></li>
-                    <li>Budget higher range: <strong>£{{ trip.budgetEnd }}</strong></li>
-                    <li>Date flexibility: <strong>{{ trip.dateFlexibility }}</strong></li>
-                </p>
-            </ul>
-        </div>
-    {% endfor %}
+<br/><br/>
+<center><h2>{{ user }}'s Upcoming Trips</h2></center>
+<br/>
+<div class="row mb-3 justify-content-center">
+    <div class="card col-6 text-center p-3 shadow-sm">
+        {% for trip in upcomingList %}
+            <h5 class="card-header text-center"><strong>{{ trip.destination }}</strong></h5>
+            <div class="card-body text-center">
+                <!-- <h5 class="card-title">{{ trip.destination }}</h5> -->
+                <ul style="list-style-type: none;">
+                    <p class="card-text">
+                        <li>Trip starts: <strong>{{ trip.dateStart }}</strong></li>
+                        <li>Trip ends: <strong>{{ trip.dateEnd }}</strong></li>
+                        <li>Budget lower range: <strong>£{{ trip.budgetStart }}</strong></li>
+                        <li>Budget higher range: <strong>£{{ trip.budgetEnd }}</strong></li>
+                        <li>Notes: {{ trip.travelNotes }}</li>
+                        <!-- <li>Date flexibility: <strong>{{ trip.dateFlexibility }}</strong></li> -->
+                    </p>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
 </div>
+
+
 {% endblock %}

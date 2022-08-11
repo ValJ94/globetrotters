@@ -8,12 +8,13 @@
 {% endblock %}
 
 {% block content_block %}
-    <h2>Travel History</h2> <br/>
 
-    <strong><a class="nav-link active"  href="{% url 'globe_app:add_history' %}">Add location to Travel History</a></strong>
-
+<div class="container_green">
+    <br/><h2>Travel History</h2><br/>
+    <a class="btn btn-success" role="button" href="{% url 'globe_app:add_history' %}">Add Location to Travel History</a>
     <!-- Mapbox API (Mapbox.com) -->
-    <!-- <div id="map"></div> -->
+    <div id="map"></div>
+</div>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -37,7 +38,7 @@
             success: function (response) {
                 console.log(response);
                 response.locationHistoryList.forEach(element => {
-                    new mapboxgl.Marker({ color: 'green' })
+                    new mapboxgl.Marker({ color: 'red' })
                         .setLngLat([element[0], element[1]])
                         .addTo(savedMap)
                 });
@@ -58,8 +59,12 @@
 
 
 {% block white_content_block %}
+<br/><br/>
+<center><h2>{{ user }}'s Travel History</h2></center>
+<br/>
 
-<div class="card">
+<div class="row mb-3 justify-content-center">
+    <div class="card col-6 text-center p-3 shadow-sm">
     {% for trip in historyList %}
         <h5 class="card-header"><strong>{{ trip.destination }}</strong></h5>
         <div class="card-body">
@@ -69,9 +74,10 @@
                     <img src="{{ MEDIA_URL }}{{ trip.travelPics }}" alt="{{ user.username }}'s travel pictures " /><br />
                     {% endif %} -->
                 </div>
-                <li>Travel Notes: {{ trip.travelNotes }}</li>
+                Travel Notes: {{ trip.travelNotes }}
             </p>
         </div>
     {% endfor %}
+    </div>
 </div>
 {% endblock %}

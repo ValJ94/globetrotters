@@ -8,12 +8,12 @@
 {% endblock %}
 
 {% block content_block %}
-    <h2>Travel Wishlist</h2> <br/>
-
-    <strong><a class="nav-link active"  href="{% url 'globe_app:add_wishlist' %}">Add location to Travel Wishlist</a></strong>
-
+<div class="container_green">
+    <br/><h2>Travel Wishlist</h2><br/>
+    <a class="btn btn-success" role="button" href="{% url 'globe_app:add_wishlist' %}">Add Location to Travel Wishlist</a>
     <!-- Mapbox API (Mapbox.com) -->
     <div id="map"></div>
+</div>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -58,8 +58,12 @@
 
 
 {% block white_content_block %}
+<br/><br/>
+<center><h2>{{ user }}'s Travel Wishlist</h2></center>
+<br/>
 
-<div class="card">
+<div class="row mb-3 justify-content-center">
+    <div class="card col-6 text-center p-3 shadow-sm">
     {% for trip in wishlistList %}
         <h5 class="card-header"><strong>{{ trip.destination }}</strong></h5>
         <div class="card-body">
@@ -68,5 +72,6 @@
             </p>
         </div>
     {% endfor %}
+    </div>
 </div>
 {% endblock %}

@@ -21,15 +21,12 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=4, choices=GENDER_CHOICES, blank=True)
     picture = models.ImageField(upload_to='profilePics', blank=True)
 
-    # rating = models.FloatField()
-
 
     def __str__(self):
         return self.user.username
 
 
 class Destination(models.Model):
-    # must be related to the map API used somehow.
     locationName = models.CharField(max_length=maxCharLength)
     longitude = models.FloatField(default=0.0)
     latitude = models.FloatField(default=0.0)
@@ -37,14 +34,14 @@ class Destination(models.Model):
     def __str__(self):
         return self.locationName
 
-class TravelNote(models.Model):
-    # owner = models.ForeignKey(User)
-    content = models.TextField(blank=True)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, blank=True)
-    # travelPics = models.ImageField(upload_to="travelPics", blank=True)
+# class TravelNote(models.Model):
+#     # owner = models.ForeignKey(User)
+#     content = models.TextField(blank=True)
+#     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, blank=True)
+#     # travelPics = models.ImageField(upload_to="travelPics", blank=True)
 
-    def __str__(self):
-        return self.content
+#     def __str__(self):
+#         return self.content
 
 
 class TravelHistory(models.Model):
@@ -74,20 +71,18 @@ class UpcomingTravel(models.Model):
         ('N', 'No'),
     )
     dateFlexibility = models.CharField(max_length=2, choices=DATE_FLEX_CHOICES, blank=True)
-    # travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE, blank=True)
+    travelNotes = models.TextField(blank=True)
 
 
 class ForumPost(models.Model):
-    # author = models.ForeignKey(User)
     title = models.CharField(max_length=maxCharLength)
-    date = models.DateField() # default needs to be current date
+    date = models.DateField(default=timezone.now) 
     content = models.TextField()
 
 class PostReply(models.Model):
     post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
-    # author = models.ForeignKey(User)
     title = models.CharField(max_length=maxCharLength)
-    date = models.DateField() # default needs to be current date
+    date = models.DateField(default=timezone.now) 
     content = models.TextField()
 
     class Meta:

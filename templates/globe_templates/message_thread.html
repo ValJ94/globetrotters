@@ -8,60 +8,68 @@
 
 {% block content_block %}
 <!-- Header for the users in the messages -->
-<div class="container">
-    <div class="row">
-        <div class="card col-md-12 p-3 shadow-sm">
+<div class="container"><br/>
+    <div class="row ">
+        <div class="card p-3">
             {% if thread.receiver == request.user %}
                 <h5>
-                    {{ thread.user }}
+                    <center>{{ thread.user }}</center>
                 </h5>
             {% else %}
                 <h5>
-                    {{ thread.receiver }}
+                <center>{{ thread.receiver }}</center>
                 </h5>
             {% endif %}
         </div>
     </div>
+    <div class="container_green_general">
     <!-- List to all the messages -->
     {% if messageList.all.count == 0 %}
         <div class="row my-5">
             <div class="col-md-12">
-                <p>There are no messages</p>
+                <center><p>There are no messages</p></center>
             </div>
         </div>
     {% endif %}
 
     {% for message in messageList %}
+    <h6>
         <div class="row">
             <div class="col-md-12 my-1">
                 {% if message.messageSender == request.user %}
                     <!-- Create some style here for the messages (differentiate between sender and receiver) -->
-                    <div>
-                        <p>
-                            {{ message.content }}
-                        </p>
+                    <div class="col-md-offset-6">
+                        <div class="container_justify_right col-6">
+                            <p class="card p-3">
+                                {{ message.content }}
+                            </p>
+                        </div>
                     </div>
                 {% elif message.messageReceiver == request.user %}
-                    <div>
-                        <p>
-                            {{ message.content }}
-                        </p>
+                    <div class="col-md-4">
+                        <div class="container_green_left">
+                            <p class="card mt-2 p-3">
+                                {{ message.content }}
+                            </p>
+                        </div>
                     </div>
 
                 {% endif %}
             </div>
         </div>
+    </h6>
     {% endfor %}
-
+</div>
 <!-- Form to submit new message -->
+<div class="content_centre">
     <div class="row">
-        <div class="card col-md-12 p-3 shadow-sm">
+        <div class="card col-md-12 p-3">
             <form method="POST" action="{% url 'globe_app:create_message' thread.pk %}">
                 {% csrf_token %}
                 {{ form }}
 
-                <div class="d-grid gap-2 mt-3">
-                    <button class="btn btn-light" type="submit">Send</button>
+                <div class= "mt-2">
+                    <button class="btn btn-outline-success" type="submit">Send</button>
                 </div>
             </form>
         </div>

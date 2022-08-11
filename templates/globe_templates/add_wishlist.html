@@ -10,9 +10,12 @@
 
 {% block content_block %}
 {% if user.is_authenticated %}
-    Add Travel Wishlist 
 
+<div class="container_green">
+    <br/>
+    <h5>Add a destination to your travel wishlist by putting it in the search bar on the map</h5>
     <div id="map"></div> <br /><br />
+</div>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -72,23 +75,25 @@
         
     </script>
 
-    <div>
+<div class="content_centre"> <br/>
+    <div><h5>You can add notes relating to the trip</h5><br/>
         {% if user.is_authenticated %}
             {% csrf_token %}
             <!-- <input type="hidden"/> -->
             {{ form.as_p }}
             {{ form.media }}
             <br />
-            <button class="btn btn-primary" type="button" name="submit" enctype="multipart/form-data"
+            <button class="btn btn-outline-success" type="button" name="submit" enctype="multipart/form-data"
                 onclick="saveWishlistLocation()">
                 Add To Travel Wishlist
             </button>
         {% endif %}
     </div>
-
-    <a class="nav-link active" href="{% url 'globe_app:travel_wishlist' user %}">Back to Travel Wishlist</a>
-{% else %}
     <br />
-        <h2>You must be registered or logged in to add to your travel wishlist.</h2><br /><br />
-{% endif %}
+    <a class="btn btn-outline-info" role="button" href="{% url 'globe_app:travel_wishlist' user %}">Return to Travel Wishlist</a><br/><br/>
+    {% else %}
+        <br />
+            <h2>You must be registered or logged in to add to your travel wishlist.</h2><br /><br />
+    {% endif %}
+</div>
 {% endblock %}

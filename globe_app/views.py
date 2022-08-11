@@ -110,6 +110,7 @@ def save_location(request):
         budgetStart = request.POST['budgetStart'],
         budgetEnd = request.POST['budgetEnd'],
         owner = request.POST['owner'],
+        travelNotes = request.POST['noteContent'],
         )
 
     return JsonResponse({'message':'Location saved'})
@@ -270,13 +271,13 @@ def my_trips(request):
 
 
 def find_buddy(request):
-    myFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all().order_by('-destination'))
+    myBuddyFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all().order_by('-destination'))
     myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
 
-    trips = myFilter.qs.order_by('-destination')
+    trips = myBuddyFilter.qs.order_by('-destination')
     users = myUserFilter.qs
 
-    context_dict = {'myFilter': myFilter, 'myUserFilter': myUserFilter, 
+    context_dict = {'myFilter': myBuddyFilter, 'myUserFilter': myUserFilter, 
                     'trips': trips, 'users': users, }
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
@@ -344,7 +345,7 @@ def thread_view(request, pk):
 
     context_dict = {'thread': thread, 'form': form, 'messageList': messageList}
 
-    return render(request, 'globe_templates/thread.html', context_dict)
+    return render(request, 'globe_templates/message_thread.html', context_dict)
 
 
 def create_message(request, pk):

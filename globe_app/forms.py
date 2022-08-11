@@ -18,7 +18,7 @@ class ProfileForm(forms.ModelForm):
 class upcomingTravelForm(ModelForm):
     class Meta:
         model = UpcomingTravel
-        fields = ('dateStart', 'dateEnd', 'budgetStart', 'budgetEnd', 'dateFlexibility',)
+        fields = ('dateStart', 'dateEnd', 'budgetStart', 'budgetEnd', 'travelNotes')
 
         dateFlexibility = forms.TypedChoiceField(initial='Yes')
 
@@ -28,7 +28,8 @@ class upcomingTravelForm(ModelForm):
             'dateEnd': '',
             'budgetStart': '',
             'budgetEnd': '',
-            'dateFlexibility': 'Are the dates flexible?',
+            'travelNotes': '',
+            # 'dateFlexibility': 'Are the dates flexible?',
         }
 
         widgets = {
@@ -44,6 +45,9 @@ class upcomingTravelForm(ModelForm):
             'budgetEnd': forms.NumberInput(attrs={'class':'form-control, col-xs-6', 
                                                     'placeholder': 'Budget to (in GBP): ',
                                                     'id': 'budget_end'}),
+            'travelNotes': forms.Textarea(attrs={'class':'form-control, col-xs-3', 
+                                                'placeholder': 'Write some notes on the destination', 
+                                                'id': 'travel_note'}),
         }
 
 

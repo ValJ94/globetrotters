@@ -7,13 +7,20 @@
 {% endblock %}
 
 {% block content_block %}
-<h1>Register Here</h1> </b>
+<div class="container_green"><br/>
+    <div class="row">
+        <h2>Add Your Details</h2>
+        <br/>
+        <form role="form" method="post" action="{% url 'globe_app:register_contd' %}" 
+        enctype="multipart/form-data"><br/>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success">
+                Submit
+            </button> <br /><br/><br/>
+        </form>
+    </div>
+    <br/><br/>  
+</div>
 
-<form method="post"
-    action="{% url 'globe_app:register_contd' %}" 
-    enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form> 
 {% endblock %}

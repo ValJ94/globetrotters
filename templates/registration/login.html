@@ -13,17 +13,24 @@
 <br/><br/><br/>
 {% else %}
 
-    <h2>Log In</h2>
-    <form method="post" action="."> 
-        {% csrf_token %}
-        {{ form.as_p }}
+<div class="container_green"><br/>
+    <div class="row">
+        <h2>Log In</h2>
+        <form role="form" method="post" action=".">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-        <input type="submit" value="Log In"/>
-        <input type="hidden" name="next" value="{{ next }}"/>
-    </form>
-    <div>
-        Not Registered Yet?
-        <a href="{% url 'registration_register' %}">Register</a>
+            <button class="btn btn-success">
+                Log In
+            </button> <br /><br/><br/>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
     </div>
+    <h2>Not Registered Yet?</h2> 
+    <a href="{% url 'registration_register' %}" type="button" class="btn btn-success">
+        Register
+    </a> <br />
+    <br/><br/>  
+</div>
 {% endif %}
 {% endblock %}

@@ -60,12 +60,11 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'globe_app:upcoming_travels' user.username %}">Upcoming
-                                        Travels</a></li>
+                                        Trips</a></li>
                                 <li><a class="dropdown-item" href="{% url 'globe_app:travel_history' user.username %}">Travel
                                         History</a></li>
                                 <li><a class="dropdown-item" href="{% url 'globe_app:travel_wishlist' user.username %}">Travel
                                         Wishlist</a></li>
-                                <li><a class="dropdown-item" href="{% url 'globe_app:travel_notes' %}">Travel Notes</a>
                                 </li>
                             </ul>
                         </li>
@@ -129,24 +128,36 @@
 <!-- footer -->
 <footer class="footer">
     {% if user.is_authenticated %}
-    <div>
-        <ul style="list-style-type: none;">
-            <li><a class="nav-link active" aria-current="page" href="{% url 'forum_app:forum' %}">Forum</a></li>
-            <li><a class="nav-link active" aria-current="page" href="{% url 'globe_app:about' %}">About</a></li>
-            <li><a class="nav-link active" href="{% url 'globe_app:profile' user.username %}">My Profile</a></li>
-            <li><a class="nav-link active" href="{% url 'auth_password_change' %}">Change password</a></li>
-            <li><a class="nav-link active" href="{% url 'auth_logout' %}?next={% url 'index' %}">Log out</a></li>
-        </ul>
+    <div class="row">
+        <div class="col">
+            <ul style="list-style-type: none;">
+                <li><a class="nav-link active" aria-current="page" href="{% url 'forum_app:forum' %}">Globetrotters Forum</a></li>
+                <li><a class="nav-link active" aria-current="page" href="{% url 'globe_app:about' %}">About Globetrotters</a></li>
+            </ul>
+        </div>
+        <div class="col">
+            <ul style="list-style-type:none;">
+                <li><a class="nav-link active" href="{% url 'globe_app:profile' user.username %}">My Profile</a></li>
+                <li><a class="nav-link active" href="{% url 'auth_password_change' %}">Change password</a></li>
+                <li><a class="nav-link active" href="{% url 'auth_logout' %}?next={% url 'index' %}">Log out</a></li>
+            </ul>
+        </div>
     </div>
     {% else %}
-    <div>
-        <ul style="list-style-type: none;">
-            <li><a class="nav-link active" aria-current="page" href="{% url 'forum_app:forum' %}">Forum</a></li>
-            <li><a class="nav-link active" aria-current="page" href="{% url 'globe_app:about' %}">About</a></li>
-            <li><a class="nav-link active" href="{% url 'auth_login' %}">Log in</a></li>
-            <li><a class="nav-link active" href="{% url 'registration_register' %}">Register</a></li>
-            <li></li>
-        </ul>
+    <div class="row">
+        <div class="col">
+            <ul style="list-style-type: none;">
+                <li><a class="nav-link active" aria-current="page" href="{% url 'forum_app:forum' %}">Globetrotters Forum</a></li>
+                <li><a class="nav-link active" aria-current="page" href="{% url 'globe_app:about' %}">About Globetrotters</a></li>
+            </ul>
+        </div>
+        <div class="col">
+            <ul style="list-style-type: none;">
+                <li><a class="nav-link active" href="{% url 'auth_login' %}">Log in</a></li>
+                <li><a class="nav-link active" href="{% url 'registration_register' %}">Register</a></li>
+                <li></li>
+            </ul>
+        </div>
     </div>
     {% endif %}
 </footer>

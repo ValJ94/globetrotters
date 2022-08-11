@@ -6,35 +6,43 @@
 {{ user_profile.first_name }}'s Profile
 {% endblock %}
 
-{% block general_content_block %}
-<div class="profile_image">
-    {% if user_profile.picture %}
-    <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" alt="{{ user.username }}'s profile picture " /><br />
-    {% endif %}
-    <ul class="profile_content" style="list-style-type: none;">
-        <li>
-            <h1>{{ user_profile.first_name }} {{user_profile.middle_name }} {{ user_profile.surname }}</h1>
-        </li>
-        <li>Age: {{ user_profile.age }}</li>
-        <li>Description: {{ user_profile.description }}</li>
-    </ul>
+{% block content_block %}
+<div class="container_green_left">
+    <div class="row">
+        <div class="col mt-3 l-1">
+            {% if user_profile.picture %}
+            <center><img src="{{ MEDIA_URL }}{{ user_profile.picture }}" alt="{{ user.username }}'s profile picture " /><br /></center>
+            {% endif %}
+        </div>
+        <div class="col mt-4">
+            <ul style="list-style-type: none;">
+                <li>
+                    <h1>{{ user_profile.first_name }} {{user_profile.middle_name }} {{ user_profile.surname }}</h1>
+                </li>
+                <li><a class="btn btn-success" role="button" href="{% url 'globe_app:create_or_find_message_thread' user user_profile %}">Message {{ user_profile.first_name }}</a></li><br/>
+                <li><strong>Age:</strong> {{ user_profile.age }}</li>
+                <li><strong>About {{ user_profile.first_name }}:</strong> <div class="card col-8 p-3">{{ user_profile.description }}</div></li>
+            </ul>
+        </div>
+    </div>
+    <br/><br/>
 </div>
 
 {% endblock %}
 
 {% block white_content_block %}
 
-<div class="content_centre">
+<div class="content_centre"><br/>
     <h4>{{ user.username }}'s Trips</h4> <br/><br/>
     <a href="{% url 'globe_app:upcoming_travels' user.username %}"
-    class="btn btn-success btn-lg active" role="button" aria-pressed="true">Upcoming Travels</a>
+    class="btn btn-outline-success" role="button" aria-pressed="true">Upcoming Travels</a>
 
     
     <a href="{% url 'globe_app:travel_history' user.username %}"
-    class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Travel History</a>
+    class="btn btn-outline-danger" role="button" aria-pressed="true">Travel History</a>
 
     <a href="{% url 'globe_app:travel_wishlist' user.username %}" 
-    class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Travel Wishlist</a>
+    class="btn btn-outline-primary" role="button" aria-pressed="true">Travel Wishlist</a>
 
 
     <div id="map"></div>
@@ -61,7 +69,7 @@
                 success: function (response) {
                     console.log(response);
                     response.locationList.forEach(element => {
-                        new mapboxgl.Marker({ color: 'red' })
+                        new mapboxgl.Marker({ color: '#8fd5a6' })
                             .setLngLat([element[0], element[1]])
                             .addTo(savedMap)
                     });
@@ -88,7 +96,7 @@
                 success: function (response) {
                     console.log(response);
                     response.locationHistoryList.forEach(element => {
-                        new mapboxgl.Marker({ color: 'green' })
+                        new mapboxgl.Marker({ color: 'red' })
                             .setLngLat([element[0], element[1]])
                             .addTo(savedMap)
                     });

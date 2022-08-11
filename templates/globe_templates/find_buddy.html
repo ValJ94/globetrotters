@@ -9,7 +9,7 @@ Find Buddy
 
 {% block content_block %}
 
-<container>
+<div class="container_green">
     <div class="row">
         <div class="card card-body text-center">
             <form method="get">
@@ -21,37 +21,39 @@ Find Buddy
             <br /><br />
         </div>
     </div>
-</container>
-
-<div class="card">
-    {% if trips %}
-    <br/>
-        <center><h4>Results</h4></center>
-        {% for trip in trips %}
-            <h5 class="card-header text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></strong></h5>
-            <div class="card-body text-center">
-                <ul style="list-style-type: none;">
-                    <p class="card-text">
-                        <li><a href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Message {{ trip.owner }}</a></li>
-                        <li>Going to: {{ trip.destination }}</li>
-                        <li>From: {{ trip.dateStart }}</li>
-                        <li>To: {{ trip.dateEnd }}</li>
-                        <li>Budget from: £{{ trip.budgetStart }}</li>
-                        <li>Budget to: £{{ trip.budgetEnd }}</li><br /><br />
-                        <li>{{ trip.owner.age }}</li>
-                    </p>
-                </ul>
-            </div>
-        {% endfor %}
-    {% else %}
-        There are currently no trips planned
-    {% endif %}
 </div>
-
+<div class="container_green"><br/>
+    <div class="row mb-3 justify-content-center">
+        <div class="card col-6 text-center p-3 shadow-sm ">
+            {% if trips %}
+            <br/>
+                <center><h4>Results</h4></center>
+                {% for trip in trips %}
+                    <br/>
+                    <h5 class="card-header text-center col-12 text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></strong></h5>
+                    <div class="card text-center col-12 p-3 shadow-sm">
+                        <ul style="list-style-type: none;">
+                            <p class="card-text">
+                                <li><a class="btn btn-outline-success" role="button" href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Message {{ trip.owner }}</a></li>
+                                <li>Going to: {{ trip.destination }}</li>
+                                <li>From: {{ trip.dateStart }}</li>
+                                <li>To: {{ trip.dateEnd }}</li>
+                                <li>Budget from: £{{ trip.budgetStart }}</li>
+                                <li>Budget to: £{{ trip.budgetEnd }}</li>
+                            </p>
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% else %}
+                There are currently no trips planned
+            {% endif %}
+        </div>
+    </div>
 
 <script>
     $("#id_dateStart").datepicker({ dateFormat: 'yy-mm-dd' });
     $("#id_dateEnd").datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
 
+</div>
 {% endblock %}

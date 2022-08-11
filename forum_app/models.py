@@ -13,6 +13,9 @@ class ForumPost(models.Model):
     
     def __str__(self):
         return self.title
+        
+    def __str_(self):
+        return self.writer
 
 class PostReply(models.Model):
     post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
