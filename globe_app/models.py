@@ -48,7 +48,7 @@ class TravelNote(models.Model):
 
 
 class TravelHistory(models.Model):
-    owner = models.CharField(null=False, max_length=maxCharLength, blank=False)
+    owner = models.CharField(null=False, max_length=maxCharLength, blank=False, default='')
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     travelPics = models.ImageField(upload_to="travelPics", blank=True)
     travelNotes = models.TextField(blank=True)
@@ -57,9 +57,9 @@ class TravelHistory(models.Model):
         verbose_name_plural = 'Travel Histories'
     
 class TravelWishlist(models.Model):
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.CharField(max_length=maxCharLength)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    travelNotes = models.ForeignKey(TravelNote, on_delete=models.CASCADE)
+    travelNotes = models.TextField(blank=True)
 
 class UpcomingTravel(models.Model):
     owner = models.CharField(null=False, max_length=maxCharLength, blank=False)
@@ -110,11 +110,3 @@ class Message(models.Model):
 
     def __str__(self):
         return "from: " + self.messageSender.username + " to:" + self.messageReceiver.username + " messageRead: " + str(self.messageRead)
-
-# class Notification(models.Model):
-#     # types: 1 = message
-#     type = models.IntegerField()
-#     to_user = models.ForeignKey(User, related_name='notification_to', on_delete=models.CASCADE, null=True)
-#     from_user = models.ForeignKey(User, related_name='notification_from', on_delete=models.CASCADE, null=True)
-#     date = models.DateTimeField(default=timezone.now)
-#     user_has_seen = models.BooleanField(default=False)

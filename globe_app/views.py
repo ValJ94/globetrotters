@@ -1,8 +1,8 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Message, TravelHistory, UserProfile, UpcomingTravel, Destination, MessageThread
-from .forms import MessageForm, MessageThreadForm, ProfileForm, upcomingTravelForm, MessageForm, TravelHistoryForm
+from .models import Message, TravelHistory, TravelWishlist, UserProfile, UpcomingTravel, Destination, MessageThread
+from .forms import MessageForm, MessageThreadForm, ProfileForm, upcomingTravelForm, MessageForm, TravelHistoryForm, TravelWishlistForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -61,7 +61,6 @@ def about(request):
 
 
 # UPCOMING TRAVELS
-
 
 def upcoming_travels(request, owner):
     upcoming_data = UpcomingTravel.objects.filter(owner=owner)
@@ -124,23 +123,17 @@ def get_user_saved_locations(request, user):
 
     # locationObjects = Destination.objects.all()
     locationObjects = UpcomingTravel.objects.filter(owner=user) # for upcoming travels
-    # historyLocationObjects = TravelHistory.objects.filter(owner=user) # for travel history
 
     lngLatList = [(record.destination.longitude, record.destination.latitude) for record in locationObjects]
     print(lngLatList)
-    # historylngLatList = [(record.destination.longitude, record.destination.latitude) for record in historyLocationObjects]
-    # print(historylngLatList)
     # lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
 
     # The below coordinates will be retrieved by the user's saved locations model
-    # return JsonResponse({'locationList': lngLatList}, {'historyLocationList': historylngLatList})
     return JsonResponse({'locationList': lngLatList})
 
 
 
 # TRAVEL HISTORY
-
-
 
 def travel_history(request, owner):
     history_data = TravelHistory.objects.filter(owner=owner)
@@ -203,14 +196,68 @@ def get_user_saved_history_locations(request, user):
 
 
 
-
-
+# TRAVEL WISHLIST
 
 def travel_wishlist(request, owner):
-    wishlist_data = TravelHistory.objects.filter(owner=owner)
+    wishlist_data = TravelWishlist.objects.filter(owner=owner)
 
     context_dict = {'wishlistList': wishlist_data}
     return render(request, 'globe_templates/travel_wishlist.html', context_dict)
+
+
+def add_wishlist(request):
+    wishlist_form = TravelWishlistForm()
+    
+    if request.method == 'POST':
+        wishlist_form = TravelWishlistForm(request.POST)
+
+        if wishlist_form.is_valid():
+            wishlist_form.save(commit=True)
+            return redirect(f'/globetrotters/travel_wishlist/{request.POST["owner"]}')
+            # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
+        else:
+            print(wishlist_form.errors)
+
+    context_dict = {'form': wishlist_form,}
+
+    return render(request, 'globe_templates/add_wishlist.html', context_dict)
+
+# save a location to the map
+def save_wishlist_location(request):
+    print(request.POST)
+    destinationObject, created = Destination.objects.get_or_create(
+        locationName = request.POST['locationFullName']
+    )
+
+# in case of adding new fields, you don't want to have copies of the same data
+    if created:
+        destinationObject.latitude = request.POST['latitude']
+        destinationObject.longitude = request.POST['longitude']
+        destinationObject.save()
+    else:
+        pass
+
+    # if locationObject:
+    wishlistLocationObject, created = TravelWishlist.objects.get_or_create(
+        destination = destinationObject,
+        owner = request.POST['owner'],
+        travelNotes = request.POST['noteContent'],
+    )
+
+    return JsonResponse({'message':'Location saved'})
+
+def get_user_saved_wishlist_locations(request, user):
+    print('Getting the locations now')
+
+    wishlistLocationObject = TravelWishlist.objects.filter(owner=user) # for upcoming travels
+
+    lngLatList = [(record.destination.longitude, record.destination.latitude) for record in wishlistLocationObject]
+    print(lngLatList)
+
+    return JsonResponse({'locationWishlistList': lngLatList})
+
+
+
 
 def travel_notes(request):
     context_dict = {}
@@ -234,18 +281,23 @@ def find_buddy(request):
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 
-def buddy_search_results(request):
+def search_users(request):
     if request.method == 'POST':
         searched = request.POST['searched']
-        destinations = UpcomingTravel.objects.filter(destination__locationName__icontains=searched)
+        # destinations = UpcomingTravel.objects.filter(destination__locationName__icontains=searched)
+        users = UserProfile.objects.filter(user__username__icontains=searched)
         return render(request, 
-        'globe_templates/buddy_search_results.html', 
+        'globe_templates/search_users.html', 
         {'searched': searched,
-        'destinations': destinations})
+        'users': users,})
+        # 'destinations': destinations})
     else:
-        return render(request, 'globe_templates/buddy_search_results.html')
+        return render(request, 'globe_templates/search_users.html')
+
+
 
 # Messaging
+# Code adapted from Legion Script on Youtube (https://www.youtube.com/watch?v=oxrQdZ5KqW0) (see bibliography)
 def list_threads(request):
     threads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
     
@@ -261,45 +313,14 @@ def list_threads(request):
             }
         })
 
-    # context_dict = {'threads': threads}
     context_dict = {'threadList': threadList}
 
     return render(request, 'globe_templates/inbox.html', context_dict)
 
 
-class CreateThread(View):
-    def get(self, request):
-        form = MessageThreadForm()
-        context_dict = {'form': form}
-
-        return render(request, 'globe_templates/create_thread.html', context_dict)
-
-    def post(self, request):
-        form = MessageThreadForm(request.POST)
-
-        username = request.POST.get('username')
-
-        try:
-            receiver = User.objects.get(username=username)
-            if MessageThread.objects.filter(user=request.user, receiver=receiver).exists(): 
-                messageThread = MessageThread.objects.filter(user=request.user, receiver=receiver)[0]
-                return redirect('globe_app:thread', pk=messageThread.pk)
-            elif MessageThread.objects.filter(user=receiver, receiver=request.user).exists():
-                messageThread = MessageThread.objects.filter(user=receiver, receiver=request.user)[0]
-                return redirect('globe_app:thread', pk=messageThread.pk)
-            
-            if form.is_valid():
-                messageThread = MessageThread(user=request.user, receiver=receiver)
-                messageThread.save()
-                return redirect('globe_app:thread', pk=messageThread.pk)
-        # if the user doesn't exist:
-        except:
-            return redirect('globe_app:create_thread')
-
 
 def thread_view(request, pk):
     print(pk)
-    # get method
     form = MessageForm()
     thread = MessageThread.objects.get(pk=pk) # the thread we'll show on screen
     messageList = Message.objects.filter(messageThread__pk__contains=pk)
@@ -320,8 +341,6 @@ def thread_view(request, pk):
         if not message.messageRead:
             message.messageRead = True
             message.save()
-
-    []
 
     context_dict = {'thread': thread, 'form': form, 'messageList': messageList}
 
@@ -344,35 +363,9 @@ def create_message(request, pk):
                     content=request.POST.get('content'))
     
     content.save()
-
-    # notification = Notification.objects.create(type = 1,
-    #                                             from_user=request.user,
-    #                                             to_user=receiver,
-    #                                             thread=thread)
-    # go back to the url
     return redirect('globe_app:thread', pk=pk)
 
 
-
-# Notifications
-
-# def thread_notification(request, notification_pk, object_pk):
-#     notification = Notification.objects.get(pk=notification_pk)
-#     thread = MessageThread.objects.get(pk=object_pk)
-
-#     notification.user_has_seen = True
-#     notification.save()
-
-#     return redirect('globe_app:thread', pk=object_pk)
-
-# def remove_notification(request, notification_pk):
-#     notification = Notification.objects.get(pk=notification_pk)
-
-#     notification.user_has_seen = True
-
-
-
-# NEW
 def create_or_find_message_thread(request, username, receiver):
     
     print(username)

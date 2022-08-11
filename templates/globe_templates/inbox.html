@@ -17,16 +17,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12 p-5">
-            <form method="GET" action="{% url 'globe_app:create_thread' %}">
-                {% csrf_token %}
-                <button class="btn btn-light p-3" type="submit">
-                    Send a message
-                </button>
-            </form>
-        </div>
-    </div>
 
     {% for threadObject in threadList %}
         <div class="row mb-3">

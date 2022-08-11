@@ -10,14 +10,14 @@
 <!-- Header for the users in the messages -->
 <div class="container">
     <div class="row">
-        <div class="card col-md-12 mt-5 p-3 shadow-sm">
+        <div class="card col-md-12 p-3 shadow-sm">
             {% if thread.receiver == request.user %}
                 <h5>
-                    @{{ thread.user }}
+                    {{ thread.user }}
                 </h5>
             {% else %}
                 <h5>
-                    @{{ thread.receiver }}
+                    {{ thread.receiver }}
                 </h5>
             {% endif %}
         </div>

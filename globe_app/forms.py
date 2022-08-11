@@ -1,7 +1,7 @@
 from pyexpat import model
 from select import select
 from django import forms
-from globe_app.models import UserProfile, UpcomingTravel, Message, TravelHistory
+from globe_app.models import TravelWishlist, UserProfile, UpcomingTravel, Message, TravelHistory
 from django.forms import  ModelForm
 
 
@@ -67,6 +67,20 @@ class TravelHistoryForm(ModelForm):
         }
 
 
+class TravelWishlistForm(ModelForm):
+    class Meta:
+        model = TravelWishlist
+        fields = ('travelNotes',)
+
+        labels = {
+            'travelNotes': '',
+        }
+
+        widgets = {
+            'travelNotes': forms.Textarea(attrs={'class':'form-control, col-xs-3', 
+                                                'placeholder': 'Write some notes on the destination', 
+                                                'id': 'travel_note'}),
+        }
 
 class MessageThreadForm(forms.Form):
     username = forms.CharField(label='', max_length=100)

@@ -1,8 +1,7 @@
 import django_filters
 from django_filters import DateFilter, CharFilter, NumberFilter, ModelChoiceFilter
 
-from .models import *
-from django.contrib.auth.models import User
+from .models import UpcomingTravel, Destination
 
 
 class BuddyFilter(django_filters.FilterSet):
@@ -11,13 +10,10 @@ class BuddyFilter(django_filters.FilterSet):
     dateEnd = DateFilter(label="Date until or earlier than", lookup_expr='gte')
     budgetStart = NumberFilter(label="Budget lower range (per day)", lookup_expr='lte')
     budgetEnd = NumberFilter(label="Budget higher range (per day)", lookup_expr='gte')
-    # gender = ModelChoiceFilter(label="Gender", queryset=UserProfile.objects.values_list('gender', flat=True))
-    # age = ModelChoiceFilter(label="Age", queryset=UserProfile.objects.values_list('age', flat=True))
 
     class Meta:
         model = UpcomingTravel
         fields = ('destination', 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd')
-        # fields = ('destination', 'dateStart', 'dateEnd', 'budgetStart', 'budgetEnd','gender', 'age')
 
 
 class UserFilter(django_filters.FilterSet):
@@ -25,10 +21,3 @@ class UserFilter(django_filters.FilterSet):
     # class Meta:
     #     model = UserProfile
     #     fields = ('gender', 'age')
-
-
-# class UsernameFilter(django_filters.FilterSet):
-
-#     class Meta:
-#         model = User
-#         fields = ('user')

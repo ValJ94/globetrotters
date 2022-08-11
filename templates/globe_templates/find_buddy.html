@@ -9,40 +9,43 @@ Find Buddy
 
 {% block content_block %}
 
-<div class="row">
-    <div class="col">
-        <div class="card card-body">
+<container>
+    <div class="row">
+        <div class="card card-body text-center">
             <form method="get">
                 {{ myFilter.form.as_p }}
-                {{ myUserFilter.form.as_p}}
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-outline-success" type="submit">
                     Search for Buddy
                 </button>
             </form> 
             <br /><br />
-            {% if trips %}
-                <h4>Current trips</h4>
-                {% for trip in trips %}
-                <ul style="list-style-type: none;">
-                    <li>User: <a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></li>
-                    <li><a href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Contact {{ trip.owner }}</a></li>
-                    <li>Going to: {{ trip.destination }}</li>
-                    <li>From: {{ trip.dateStart }}</li>
-                    <li>To: {{ trip.dateEnd }}</li>
-                    <li>Budget from: £{{ trip.budgetStart }}</li>
-                    <li>Budget to: £{{ trip.budgetEnd }}</li><br /><br />
-                    <li>{{ trip.owner.age }}</li>
-                </ul>
-                {% endfor %}
-            {% else %}
-                There are currently no trips planned
-            {% endif %}
-            <!-- {% for user in users %}
-                Gender: {{ user.gender }} <br />
-                Age: {{ user.age }}
-            {% endfor %} -->
         </div>
     </div>
+</container>
+
+<div class="card">
+    {% if trips %}
+    <br/>
+        <center><h4>Results</h4></center>
+        {% for trip in trips %}
+            <h5 class="card-header text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></strong></h5>
+            <div class="card-body text-center">
+                <ul style="list-style-type: none;">
+                    <p class="card-text">
+                        <li><a href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Message {{ trip.owner }}</a></li>
+                        <li>Going to: {{ trip.destination }}</li>
+                        <li>From: {{ trip.dateStart }}</li>
+                        <li>To: {{ trip.dateEnd }}</li>
+                        <li>Budget from: £{{ trip.budgetStart }}</li>
+                        <li>Budget to: £{{ trip.budgetEnd }}</li><br /><br />
+                        <li>{{ trip.owner.age }}</li>
+                    </p>
+                </ul>
+            </div>
+        {% endfor %}
+    {% else %}
+        There are currently no trips planned
+    {% endif %}
 </div>
 
 

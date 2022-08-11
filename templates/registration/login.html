@@ -7,17 +7,23 @@
 {% endblock %}
 
 {% block content_block %}
-<h2>Log In</h2>
-<form method="post" action="."> 
-    {% csrf_token %}
-    {{ form.as_p }}
+{% if user.is_authenticated %}
+<br/><br/><br/>
+    <h4>You are already logged in.</h4>
+<br/><br/><br/>
+{% else %}
 
-    <input type="submit" value="Log In"/>
-    <input type="hidden" name="next" value="{{ next }}"/>
-</form>
-<div>
-    Not Registered Yet?
-    <a href="{% url 'registration_register' %}">Register</a>
-</div>
+    <h2>Log In</h2>
+    <form method="post" action="."> 
+        {% csrf_token %}
+        {{ form.as_p }}
 
+        <input type="submit" value="Log In"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
+    <div>
+        Not Registered Yet?
+        <a href="{% url 'registration_register' %}">Register</a>
+    </div>
+{% endif %}
 {% endblock %}

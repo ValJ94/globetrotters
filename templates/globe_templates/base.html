@@ -72,9 +72,9 @@
                         {% endif %}
                     </ul>
                     <div>
-                        <form class="d-flex" role="search" method="POST" action="{% url 'globe_app:buddy_search_results' %}">
+                        <form class="d-flex" role="search" method="POST" action="{% url 'globe_app:search_users' %}">
                             {% csrf_token %}
-                            <input class="form-control me-2" type="search" placeholder="Search Destination" aria-label="Search" name="searched">
+                            <input class="form-control me-2" type="search" placeholder="Search Users" aria-label="Search" name="searched">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
@@ -116,9 +116,8 @@
     <!-- main content -->
     <main role="main" class="col-md-12 ml-sm-auto col-xl-1200">
         {% block general_content_block %} {% endblock %}
-        <div class="container_green">
-            {% block content_block %} {% endblock %}
-        </div>
+        {% block content_block %} {% endblock %}
+        {% block general_content_block_2 %} {% endblock %}
         {% block white_content_block %} {% endblock %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"

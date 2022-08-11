@@ -9,8 +9,25 @@ Homepage
 
 {% block content_block %}
 
-<div>
-    <img src="{% static 'images/test.jpg' %}" alt="Test Image" />
+<div class="container_green"><br/><br/>
+    <div class="container" >
+        <div class="row">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="jumbotron-heading"> Don't want to travel alone?</h3>
+                    <br/>
+                    Find your travel buddy here!
+                    <hr>
+                    How it works:
+                </div>
+            </div>
+        </div>
+    </div><br/>
+</div>
+
+
+<div class="index_picture">
+    <img src="{% static 'images/index.jpg' %}" alt="How To Image" />
 </div>
 {% if user.is_authenticated %}
 
@@ -18,9 +35,19 @@ Homepage
 {% endblock %}
 
 {% block white_content_block %}
-<div>
-    <img src="{% static 'images/test.jpg' %}" alt="Test Image" />
+
+<div class="index_registration">
+    <h5>Register here: <br/><br/></h5>
+    <a href="{% url 'registration_register' %}" 
+    type="button" class="btn btn-dark">Register</a> <br/><br/><br/>
+
+    <h5>Already have an account?<br/><br/></h5>
+    <a href="{% url 'auth_login' %}"
+     type="button" class="btn btn-dark" >Log In</a> <br/><br/><br/>
+
 </div>
+
+
 {% endblock %}
 
 {% block third_content_block %}

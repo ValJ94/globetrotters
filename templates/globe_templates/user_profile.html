@@ -24,5 +24,116 @@
 
 {% block white_content_block %}
 
+<div class="content_centre">
+    <h4>{{ user.username }}'s Trips</h4> <br/><br/>
+    <a href="{% url 'globe_app:upcoming_travels' user.username %}"
+    class="btn btn-success btn-lg active" role="button" aria-pressed="true">Upcoming Travels</a>
 
+    
+    <a href="{% url 'globe_app:travel_history' user.username %}"
+    class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Travel History</a>
+
+    <a href="{% url 'globe_app:travel_wishlist' user.username %}" 
+    class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Travel Wishlist</a>
+
+
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+        var savedMap = new mapboxgl.Map({
+            container: 'map',
+            // projection: 'globe',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            projection: 'naturalEarth',
+            zoom: 0.75
+        });
+    
+        function getLocations() {
+
+            let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+            // ajax request to send the coordinates to the backend
+            $.ajax({
+                type: "GET",
+                url: "{% url 'globe_app:get_user_saved_locations' user %}",
+                headers: { 'X-CSRFToken': csrfToken },
+                // success and error are callbacks. They notify when the request is done.
+                success: function (response) {
+                    console.log(response);
+                    response.locationList.forEach(element => {
+                        new mapboxgl.Marker({ color: 'red' })
+                            .setLngLat([element[0], element[1]])
+                            .addTo(savedMap)
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('failed');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+        }
+
+        document.addEventListener("load", getLocations());
+    
+        function getHistoryLocations() {
+            let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+            // ajax request to send the coordinates to the backend
+            $.ajax({
+                type: "GET",
+                url: "{% url 'globe_app:get_user_saved_history_locations' user %}",
+                headers: { 'X-CSRFToken': csrfToken },
+                // success and error are callbacks. They notify when the request is done.
+                success: function (response) {
+                    console.log(response);
+                    response.locationHistoryList.forEach(element => {
+                        new mapboxgl.Marker({ color: 'green' })
+                            .setLngLat([element[0], element[1]])
+                            .addTo(savedMap)
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('failed');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            }
+    
+            document.addEventListener("load", getHistoryLocations());
+
+
+        function getWishlistLocations() {
+            let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+            // ajax request to send the coordinates to the backend
+            $.ajax({
+                type: "GET",
+                url: "{% url 'globe_app:get_user_saved_wishlist_locations' user %}",
+                headers: { 'X-CSRFToken': csrfToken },
+                // success and error are callbacks. They notify when the request is done.
+                success: function (response) {
+                    console.log(response);
+                    response.locationWishlistList.forEach(element => {
+                        new mapboxgl.Marker({ color: 'blue' })
+                            .setLngLat([element[0], element[1]])
+                            .addTo(savedMap)
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('failed');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            }
+
+
+            document.addEventListener("load", getWishlistLocations());
+    </script>
+
+
+</div>
 {% endblock %}

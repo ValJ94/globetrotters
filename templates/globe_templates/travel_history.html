@@ -13,7 +13,7 @@
     <strong><a class="nav-link active"  href="{% url 'globe_app:add_history' %}">Add location to Travel History</a></strong>
 
     <!-- Mapbox API (Mapbox.com) -->
-    <div id="map"></div>
+    <!-- <div id="map"></div> -->
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
@@ -64,10 +64,10 @@
         <h5 class="card-header"><strong>{{ trip.destination }}</strong></h5>
         <div class="card-body">
             <p class="card-text">
-                <div class="travel-pictures">
-                    {% if trip.travelPics %}
+                <div class="travel_pictures">
+                    <!-- {% if trip.travelPics %}
                     <img src="{{ MEDIA_URL }}{{ trip.travelPics }}" alt="{{ user.username }}'s travel pictures " /><br />
-                    {% endif %}
+                    {% endif %} -->
                 </div>
                 <li>Travel Notes: {{ trip.travelNotes }}</li>
             </p>

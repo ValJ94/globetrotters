@@ -1,0 +1,31 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Search Results
+{% endblock %}
+
+{% block content_block %}
+
+{% if searched %}
+    <h2>Results for {{searched}}</h2> <br />
+    
+    {% for searchedUser in users %}
+    <ul style="list-style-type: none;">
+        {% if searchedUser.picture %}
+            <img src="{{ MEDIA_URL }}{{ searchedUser.picture }}" alt="{{ searchedUser }}'s profile picture " /><br />
+        {% endif %}
+        <li>User: <a href="{% url 'globe_app:profile' user %}">{{ searchedUser }}</a></li>
+        <li><a href="{% url 'globe_app:create_or_find_message_thread' user searchedUser %}">Message {{ searchedUser }}</a></li>
+        <li>Age: {{ searchedUser.age }}</li>
+        <li>Gender: {{ searchedUser.gender }}</li>
+        <li>Description: {{ searchedUser.description }}</li>
+    </ul>
+    {% endfor %}
+
+{% else %}
+    <h2>Please enter a destination to search for</h2>
+
+{% endif %}
+{% endblock %}
