@@ -326,8 +326,8 @@ def thread_view(request, pk):
     thread = MessageThread.objects.get(pk=pk) # the thread we'll show on screen
     messageList = Message.objects.filter(messageThread__pk__contains=pk)
 
-    print(pk)
-    print(thread.user.username)
+    # print(pk)
+    # print(thread.user.username)
 
     # Get the messages from the messageList that belong to the TO user who's requesting them
     # Check whichever are unread and change their status to True (Since after you retrieve them the user has read them)
@@ -349,7 +349,6 @@ def thread_view(request, pk):
 
 
 def create_message(request, pk):
-    # Just one POST method
     thread = MessageThread.objects.get(pk=pk)
 
     # Make sure we have the right user
@@ -369,8 +368,8 @@ def create_message(request, pk):
 
 def create_or_find_message_thread(request, username, receiver):
     
-    print(username)
-    print(receiver)
+    # print(username)
+    # print(receiver)
 
     senderObject = User.objects.get(username=username)
     try:

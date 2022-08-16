@@ -10,7 +10,7 @@
 
 <div class="container_green">
     <div class="row">
-        <div class="col-md-12 p-5">
+        <div class="p-5">
             <h3>
                 Messages
             </h3>
@@ -20,11 +20,10 @@
 
     {% for threadObject in threadList %}
         <div class="row mb-3 justify-content-center">
-            <div class="card col-6 p-3 shadow-sm">
+            <div class="card col-5 p-3">
                 <h5>
                     {{ threadObject.thread.receiver }} (Unread Messages: {{ threadObject.messages.unreadMessages }})
                 </h5>
-                <!-- haven't created thread link yet -->
                 <a class="stretched-link" href="{% url 'globe_app:thread' threadObject.thread.pk %}"></a>
             </div> 
         </div><br/>

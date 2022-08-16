@@ -9,9 +9,9 @@ django.setup()
 from globe_app.models import *
 
 def populate():
-
-    destinations = [
-        {'location':'Iceland'}
-        {'location':'Norway'}
-        {'location':'Finland'}
-        ]
+    pass
+    # destinations = [
+    #     {'location':'Iceland'}
+    #     {'location':'Norway'}
+    #     {'location':'Finland'}
+    #     ]

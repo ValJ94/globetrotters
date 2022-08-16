@@ -39,7 +39,6 @@ def add_post(request):
 
 def view_post(request, id):
     post = ForumPost.objects.get(id=id)
-
     post_replies = PostReply.objects.filter(post__id__contains=id)
 
     context_dict = {'post_replies': post_replies, 'post': post}

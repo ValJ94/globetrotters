@@ -35,9 +35,16 @@ Add Location to Upcoming
     // save the location information to the backend from Mapbox API
     function saveLocation() {
         console.log(map._markers);
-        let latitude = map._markers[0]._lngLat.lat;
-        let longitude = map._markers[0]._lngLat.lng;
-        let locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+        let latitude, longitude, locationFullName;
+
+        try {
+            latitude = map._markers[0]._lngLat.lat;
+            longitude = map._markers[0]._lngLat.lng;
+            locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+        } catch (e) {
+            $("#error_message_text").text('Please search for a location before submitting.');
+        }
+
         // the following are values input into the form boxes
 
         let dateStart = $('#date_start').val();
@@ -48,6 +55,8 @@ Add Location to Upcoming
         let noteContent = $('#travel_note').val();
 
         if (!locationFullName || !latitude || !longitude) {
+            $("#error_message_text").text('Please check that you added a location.');
+            console.log('error message')
             return;
         }
 
@@ -95,6 +104,7 @@ Add Location to Upcoming
                 onclick="saveLocation()">
                 Add To Upcoming Trips
             </button>
+            <br/><span id="error_message_text" style="color: red;"></span>
         {% endif %}
     </div>
 
