@@ -272,13 +272,15 @@ def my_trips(request):
 
 def find_buddy(request):
     myBuddyFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all().order_by('-destination'))
-    myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
+    # myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
+
 
     trips = myBuddyFilter.qs.order_by('-destination')
-    users = myUserFilter.qs
+    # users = myUserFilter.qs
 
-    context_dict = {'myFilter': myBuddyFilter, 'myUserFilter': myUserFilter, 
-                    'trips': trips, 'users': users, }
+    # context_dict = {'myFilter': myBuddyFilter, 'myUserFilter': myUserFilter, 
+    #                 'trips': trips, 'users': users, }
+    context_dict = {'myFilter': myBuddyFilter, 'trips': trips}
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
 

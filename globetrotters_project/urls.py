@@ -10,6 +10,7 @@ from registration.backends.simple.views import RegistrationView
 class Registration(RegistrationView):
     def get_success_url(self, user):
         return reverse('globe_app:register_contd')
+        # return reverse('user_app:register_contd')
 
 
 urlpatterns = [

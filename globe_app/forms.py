@@ -1,7 +1,5 @@
-from pyexpat import model
-from select import select
 from django import forms
-from globe_app.models import TravelWishlist, UserProfile, UpcomingTravel, Message, TravelHistory
+from globe_app.models import TravelWishlist, UpcomingTravel, Message, TravelHistory, UserProfile
 from django.forms import  ModelForm
 
 
@@ -99,6 +97,6 @@ class MessageForm(forms.ModelForm):
         }
 
         widgets = {
-            'message': forms.Textarea(attrs={'class':'form-control, col-xs-2', 
+            'content': forms.Textarea(attrs={'class':'form-control', 
                                                 'placeholder': 'Write here',}), 
         }

@@ -8,19 +8,21 @@ Find Buddy
 {% endblock %}
 
 {% block content_block %}
-
 <div class="container_green">
-    <div class="row">
-        <div class="card card-body text-center">
-            <form method="get">
-                {{ myFilter.form.as_p }}
-                <button class="btn btn-outline-success" type="submit">
-                    Search for Buddy
-                </button>
-            </form> 
+    <!-- <div class="row"> -->
+        <div class="text-center" style="background-color: #abe0bc">
+            <div class="bg-image" 
+            style="background-image: url({% static 'images/findbuddy.jpeg' %});">
+                <form method="get" style="padding-top: 55px;">
+                    {{ myFilter.form.as_p }}
+                    <button class="btn btn-success" style="opacity: 0.8;" type="submit">
+                        Search for Buddy
+                    </button>
+                </form> 
             <br /><br />
+            </div>
         </div>
-    </div>
+    <!-- </div> -->
 </div>
 <div class="container_green"><br/>
     <div class="row mb-3 justify-content-center">

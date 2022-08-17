@@ -20,7 +20,8 @@
 
     {% for threadObject in threadList %}
         <div class="row mb-3 justify-content-center">
-            <div class="card col-5 p-3">
+            <div class="card col-5 p-3" style="background: #ffffffd4;
+                border-left: 5px solid black;">
                 <h5>
                     {{ threadObject.thread.receiver }} (Unread Messages: {{ threadObject.messages.unreadMessages }})
                 </h5>

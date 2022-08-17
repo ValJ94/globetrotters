@@ -74,6 +74,7 @@ class UpcomingTravel(models.Model):
     travelNotes = models.TextField(blank=True)
 
 
+
 class ForumPost(models.Model):
     title = models.CharField(max_length=maxCharLength)
     date = models.DateField(default=timezone.now) 

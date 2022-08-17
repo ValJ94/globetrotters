@@ -46,3 +46,8 @@ class PostViewTests(TestCase):
         self.assertFalse(self.user.is_superuser)
 
         self.forumObject = ForumPost.objects.create(writer=self.user,title='Test Title For NOwW',content='Test Content TTT')
+
+    # def test_user_exists(self):
+    #     user_count = User.objects.all().count()
+    #     print(user_count)
+    #     self.assertNotEqual(user_count, 0)
