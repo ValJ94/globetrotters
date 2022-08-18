@@ -5,6 +5,7 @@ from .forms import ForumPostForm, PostReplyForm
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.utils.decorators import method_decorator
+from globe_app.models import User
 
 
 

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import collections
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +51,19 @@ INSTALLED_APPS = [
     'registration',
     'forum_app',
     'django_filters',
+    'django_nose',
 ]
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'forum_app' and 'globe_app' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=forum_app,globe_app',
+    '--cover-html'
+]
+collections.Callable = collections.abc.Callable
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
