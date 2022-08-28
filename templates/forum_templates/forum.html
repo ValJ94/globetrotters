@@ -12,8 +12,8 @@
 <div class="container_white">
     <center><a href="{% url 'forum_app:add_post' %}" class="btn btn-success" 
         role="button" aria-pressed="true" style="position: absolute;
-        right: 11px;
-        top: 7%;
+        right: 5px;
+        top: 10%;
         z-index: 1;">Add Post</a> </center> 
     <div class="bg-image" 
         style="background-image: url({% static 'images/forum.jpeg' %});background-size: cover;height:693px;">
@@ -25,7 +25,7 @@
                 <div  style="display: flex;flex-flow: wrap;">
                     {% for post in post_list %}<br/>
                     <div class="col-sm-6">
-                        <h5 class="card-header text-center col-12 text-center"><strong><a href="/forum/{{ post.id }}">{{ post.title }} </a></strong></h5>
+                        <h5 class="card-header text-center col-12 text-center"><strong><a style="color: #212529;" href="/forum/{{ post.id }}">{{ post.title }} </a></strong></h5>
                         <div class="card text-center col-12 p-1 shadow-sm">
                             <ul style="list-style-type: none;">
                                 <div class="card-text">

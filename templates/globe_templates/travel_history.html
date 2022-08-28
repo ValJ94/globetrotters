@@ -66,14 +66,14 @@
 <div class="row mb-3 justify-content-center">
     <div class="card col-6 text-center p-3 shadow-sm">
     {% for trip in historyList %}
-        <h5 class="card-header"><strong>{{ trip.destination }}</strong></h5>
+        <h5 class="card-header" style="background-color: rgba(143, 213, 166, 75%);"><strong>{{ trip.destination }}</strong></h5>
         <div class="card-body">
             <p class="card-text">
-                <div class="travel_pictures">
+                <!-- <div class="travel_pictures"> -->
                     <!-- {% if trip.travelPics %}
                     <img src="{{ MEDIA_URL }}{{ trip.travelPics }}" alt="{{ user.username }}'s travel pictures " /><br />
                     {% endif %} -->
-                </div>
+                <!-- </div> -->
                 Travel Notes: {{ trip.travelNotes }}
             </p>
         </div>

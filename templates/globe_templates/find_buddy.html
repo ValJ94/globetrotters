@@ -14,7 +14,17 @@ Find Buddy
             <div class="bg-image" 
             style="background-image: url({% static 'images/findbuddy.jpeg' %});background-size: cover;">
                 <form method="get" style="padding-top: 55px;">
-                    {{ myFilter.form.as_p }}
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.destination.label }}: {{ myFilter.form.destination }} <br/>
+                    </p>
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.dateStart.label }}: {{ myFilter.form.dateStart }}
+                        {{ myFilter.form.dateEnd.label }}: {{ myFilter.form.dateEnd }} <br/>
+                    </p>
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.budgetStart.label }}: {{ myFilter.form.budgetStart }}
+                        {{ myFilter.form.budgetEnd.label }}: {{ myFilter.form.budgetEnd }}
+                    </p>
                     <button class="btn btn-success" style="opacity: 0.8;" type="submit">
                         Search for Buddy
                     </button>
@@ -37,7 +47,7 @@ Find Buddy
                         <br/>
                         
                         <div class="card text-center col-12 p-3 shadow-sm" style="min-height: 305px;">
-                            <h5 class="card-header text-center col-12 text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}">{{ trip.owner }}</a></strong></h5>
+                            <h5 class="card-header text-center col-12 text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}" style="color: #212529;">{{ trip.owner }}</a></strong></h5>
                             <ul style="list-style-type: none;">
                                 <p class="card-text">
                                     <li>Going to: {{ trip.destination }}</li>
