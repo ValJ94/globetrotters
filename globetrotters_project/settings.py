@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'forum_app',
     'django_filters',
     'django_nose',
+    'django_extensions',
 ]
 
 # Use nose to run all tests
@@ -163,3 +164,9 @@ REGISTRATION_OPEN = True
 REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = 'globe_app:index'
 LOGIN_URL = 'auth_login'
+
+
+GRAPH_MODELS ={
+    'all_applications': True,
+    'group_models': True,
+}

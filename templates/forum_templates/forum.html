@@ -9,27 +9,34 @@
 
 {% block content_block %}
 
-<div class="container_white"><br/>
+<div class="container_white">
     <center><a href="{% url 'forum_app:add_post' %}" class="btn btn-success" 
-        role="button" aria-pressed="true">Add Post</a> </center> <br/>
+        role="button" aria-pressed="true" style="position: absolute;
+        right: 11px;
+        top: 7%;
+        z-index: 1;">Add Post</a> </center> 
     <div class="bg-image" 
-        style="background-image: url({% static 'images/forum.jpeg' %});">
-        <div class="row mb-3 justify-content-center">
-            <div class="card col-6 text-center p-3 shadow-sm" style="opacity: 0.9; overflow-y: scroll;">
+        style="background-image: url({% static 'images/forum.jpeg' %});background-size: cover;height:693px;">
+        <div class="row mb-3 justify-content-center" style="    position: relative;overflow: hidden;
+        height: 100%;">
+            <div class="card col-6 text-center p-3 shadow-sm" style="opacity: 0.9; overflow-y: scroll;height: 100%;width: 80%;">
                 <center><h4>Current posts: </h4></center>
-                <br/>
                 {% if post_list %}
+                <div  style="display: flex;flex-flow: wrap;">
                     {% for post in post_list %}<br/>
-                    <h5 class="card-header text-center col-12 text-center"><strong><a href="/forum/{{ post.id }}">{{ post.title }} </a></strong></h5>
-                    <div class="card text-center col-12 p-1 shadow-sm">
-                        <ul style="list-style-type: none;">
-                            <p class="card-text">
-                                <li>{{ post.writer }}</li>
-                                <li>{{ post.timestamp }}</li>
-                            </p>
-                        </ul>
+                    <div class="col-sm-6">
+                        <h5 class="card-header text-center col-12 text-center"><strong><a href="/forum/{{ post.id }}">{{ post.title }} </a></strong></h5>
+                        <div class="card text-center col-12 p-1 shadow-sm">
+                            <ul style="list-style-type: none;">
+                                <div class="card-text">
+                                    <p>{{ post.timestamp }}</p>
+                                    <p>by {{ post.writer.username }}</p>
+                                </div>
+                            </ul>
+                        </div>
                     </div>
                     {% endfor %}
+                </div>
                 {% else %}
                     There are no posts currently.
                 {% endif %}

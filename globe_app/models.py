@@ -75,19 +75,19 @@ class UpcomingTravel(models.Model):
 
 
 
-class ForumPost(models.Model):
-    title = models.CharField(max_length=maxCharLength)
-    date = models.DateField(default=timezone.now) 
-    content = models.TextField()
+# class ForumPost(models.Model):
+#     title = models.CharField(max_length=maxCharLength)
+#     date = models.DateField(default=timezone.now) 
+#     content = models.TextField()
 
-class PostReply(models.Model):
-    post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
-    title = models.CharField(max_length=maxCharLength)
-    date = models.DateField(default=timezone.now) 
-    content = models.TextField()
+# class PostReply(models.Model):
+#     post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
+#     title = models.CharField(max_length=maxCharLength)
+#     date = models.DateField(default=timezone.now) 
+#     content = models.TextField()
 
-    class Meta:
-        verbose_name_plural = 'PostReplies'
+#     class Meta:
+#         verbose_name_plural = 'PostReplies'
 
 
 # Messaging Functionality

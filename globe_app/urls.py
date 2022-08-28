@@ -28,7 +28,6 @@ urlpatterns = [
     path('save_wishlist_location/', views.save_wishlist_location, name='save_wishlist_location'),
     path('get_user_saved_wishlist_locations/<user>/', views.get_user_saved_wishlist_locations, name='get_user_saved_wishlist_locations'),
     
-    path('travel_notes/', views.travel_notes, name='travel_notes'),
     path('my_trips/', views.my_trips, name='my_trips'),
     path('search_users/', views.search_users, name='search_users'),
 

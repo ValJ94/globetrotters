@@ -5,7 +5,7 @@ from forum_app.models import ForumPost, PostReply
 class ForumPostForm(forms.ModelForm):
     class Meta:
         model = ForumPost
-        fields = ('title', 'content',)
+        fields = ('title', 'content')
 
         labels = {
             'title': '',

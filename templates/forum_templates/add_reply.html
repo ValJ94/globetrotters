@@ -9,17 +9,27 @@
 
 {% block content_block %}
 {% if user.is_authenticated %}
-    <div class="container_green"><br/>
-        <div class="row">
-            <form role="form" method="post" action="{% url 'forum_app:add_reply' post_id %}">
-                {{ form.as_p }}
-                {% csrf_token %}
+    <div class="container_green_standard"><br/>
+        <div class="row mb-3 justify-content-center">
+            <div class="card col-10 text-center p-3 shadow-sm ">
+                <h4 class="card-header text-center col-12 text-center">
+                    {{ post_title }}<br/></h4>
+                    <div class="card text-center col-12 p-1 shadow-sm">
+                    <p class="card-text">
+                        <h5>{{ post_content }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div> 
+        <form role="form" method="post" action="{% url 'forum_app:add_reply' post_id %}">
+            {{ form.as_p }}
+            {% csrf_token %}
 
-                <button class="btn btn-success">
-                    Submit comment
-                </button> <br />
-            </form>
-        </div>
+            <button class="btn btn-success">
+                Submit comment
+            </button> <br />
+        </form>
+
         <br/><br/><br/>     
     </div>
 {% endif %}

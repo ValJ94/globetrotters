@@ -11,8 +11,8 @@ from globe_app.models import User
 
 
 def forum(request):
-    post_list = ForumPost.objects.all().values().order_by('-timestamp')
-
+    # post_list = ForumPost.objects.all().values().order_by('-timestamp')
+    post_list = ForumPost.objects.all().order_by('-timestamp')
     context_dict = {'post_list': post_list}
     return render(request, 'forum_templates/forum.html', context_dict)
 
@@ -68,7 +68,7 @@ def reply_view(request, id=-1):
             post = ForumPost.objects.filter(id=id)
             # post = ForumPost.objects.get(id=id)
             form = PostReplyForm()
-            context_dict = {'form': form, 'post': post, 'post_id': post[0].id}
+            context_dict = {'form': form, 'post': post, 'post_title':post[0].title, 'post_content': post[0].content, 'post_id': post[0].id}
             return render(request, 'forum_templates/add_reply.html', context_dict)
 
 
