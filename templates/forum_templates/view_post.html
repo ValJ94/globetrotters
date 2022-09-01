@@ -20,11 +20,11 @@
                 {{ post.title }}<br/></h4>
                 <div class="card text-center col-12 p-1 shadow-sm">
                 <p class="card-text">
-                    <h5>{{ post.content }}</h5>
+                    <h5>{{ post.content|linebreaks }}</h5>
                 </p>
                 <div style="display:flex;">
                     <div style="text-align: left;" class="col-sm-6">
-                        <a href="{% url 'globe_app:profile' post.writer %}">{{ post.writer }}</a>
+                        <a style="color: #212529;" href="{% url 'globe_app:profile' post.writer %}">{{ post.writer }}</a>
                     </div>
                     <div style="text-align: right;color:grey;" class="col-sm-6">{{ post.timestamp }}</div>
                 </div>
@@ -47,7 +47,7 @@
                     
                 <div style="display:flex;padding: 0 5px;">
                     <div style="text-align: left;" class="col-sm-6">
-                        <a href="{% url 'globe_app:profile' post.writer %}">{{ reply.reply_writer }}</a>
+                        <a style="color: #212529;" href="{% url 'globe_app:profile' post.writer %}">{{ reply.reply_writer }}</a>
                     </div>
                     <div style="text-align: right;color:grey;" class="col-sm-6">{{ reply.timestamp }}</div>
                 </div> 

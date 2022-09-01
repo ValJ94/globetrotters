@@ -35,14 +35,14 @@
 <div class="content_centre"><br/>
     <h4>{{ user.username }}'s Trips</h4> <br/><br/>
     <a href="{% url 'globe_app:upcoming_travels' user.username %}"
-    class="btn btn-outline-success" role="button" aria-pressed="true">Upcoming Travels</a>
+    class="btn btn-success" role="button" aria-pressed="true">Upcoming Travels</a>
 
     
     <a href="{% url 'globe_app:travel_history' user.username %}"
-    class="btn btn-outline-danger" role="button" aria-pressed="true">Travel History</a>
+    class="btn btn-dark" role="button" aria-pressed="true">Travel History</a>
 
     <a href="{% url 'globe_app:travel_wishlist' user.username %}" 
-    class="btn btn-outline-primary" role="button" aria-pressed="true">Travel Wishlist</a>
+    class="btn btn-light" role="button" aria-pressed="true">Travel Wishlist</a>
 
 
     <div id="map"></div>
@@ -96,7 +96,7 @@
                 success: function (response) {
                     console.log(response);
                     response.locationHistoryList.forEach(element => {
-                        new mapboxgl.Marker({ color: 'red' })
+                        new mapboxgl.Marker({ color: 'black' })
                             .setLngLat([element[0], element[1]])
                             .addTo(savedMap)
                     });
@@ -124,7 +124,7 @@
                 success: function (response) {
                     console.log(response);
                     response.locationWishlistList.forEach(element => {
-                        new mapboxgl.Marker({ color: 'blue' })
+                        new mapboxgl.Marker({ color: 'lightgrey' })
                             .setLngLat([element[0], element[1]])
                             .addTo(savedMap)
                     });

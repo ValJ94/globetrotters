@@ -62,8 +62,8 @@ def about(request):
 # UPCOMING TRAVELS
 
 def upcoming_travels(request, owner):
-    upcoming_data = UpcomingTravel.objects.filter(owner=owner)
-    # upcoming_data = UpcomingTravel.objects.all()
+    # make sure the list is the current users list
+    upcoming_data = UpcomingTravel.objects.filter(owner=owner) 
     # print(UpcomingTravel.objects.all())
 
     return render(request, 'globe_templates/upcoming_travels.html', {'upcomingList': upcoming_data})
@@ -78,9 +78,8 @@ def add_upcoming_travel(request):
         if upcoming_form.is_valid():
             upcoming_form.save(commit=True)
             return redirect(f'/globetrotters/upcoming_travels/{request.POST["owner"]}')
-            # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
         else:
-            # print(upcoming_form.errors)
+            print(upcoming_form.errors)
             pass
 
     return render(request, 'globe_templates/add_upcoming_travel.html', {'form': upcoming_form,})
@@ -100,6 +99,7 @@ def save_location(request):
     else:
         pass
 
+    # The location is provided on the client via an AJAX request (see 'add_upcoming_travels' template)
     # if locationObject:
     locationObject, created = UpcomingTravel.objects.get_or_create(
         destination = destinationObject,
@@ -115,17 +115,14 @@ def save_location(request):
     # return redirect(f'/globetrotters/upcoming_travels/{request.POST["owner"]}')
 
 
-# get the coordinates to show the locations on the maps
+# get the coordinates to show the locations on the maps via pins
 def get_user_saved_locations(request, user):
-    # owner = request.POST['user']
     # print('Getting the locations now')
 
-    # locationObjects = Destination.objects.all()
     locationObjects = UpcomingTravel.objects.filter(owner=user) # for upcoming travels
 
     lngLatList = [(record.destination.longitude, record.destination.latitude) for record in locationObjects]
     # print(lngLatList)
-    # lngLatList = [(record.longitude, record.latitude) for record in locationObjects]
 
     # The below coordinates will be retrieved by the user's saved locations model
     return JsonResponse({'locationList': lngLatList})
@@ -133,6 +130,7 @@ def get_user_saved_locations(request, user):
 
 
 # TRAVEL HISTORY
+# same logic as upcoming travels, but different fields in the forms
 
 def travel_history(request, owner):
     history_data = TravelHistory.objects.filter(owner=owner)
@@ -151,15 +149,14 @@ def add_history(request):
             return redirect(f'/globetrotters/travel_history/{request.POST["owner"]}')
             # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
         else:
-            # print(history_form.errors)
+            print(history_form.errors)
             pass
 
     return render(request, 'globe_templates/add_history.html', {'form': history_form,})
-
+    # return render(request, 'globe_templates/add_upcoming_travel.html', {'form': upcoming_form,})
 
 # save a location to the map
 def save_history_location(request):
-    # print(request.POST)
     destinationObject, created = Destination.objects.get_or_create(
         locationName = request.POST['locationFullName']
     )
@@ -176,7 +173,7 @@ def save_history_location(request):
     historyLocationObject, created = TravelHistory.objects.get_or_create(
         destination = destinationObject,
         owner = request.POST['owner'],
-        travelPics = request.POST['travelPics'],
+        # travelPics = request.POST['travelPics'],
         travelNotes = request.POST['noteContent'],
     )
 
@@ -195,6 +192,7 @@ def get_user_saved_history_locations(request, user):
 
 
 # TRAVEL WISHLIST
+# same logic as upcoming travels, but different fields in the forms
 
 def travel_wishlist(request, owner):
     wishlist_data = TravelWishlist.objects.filter(owner=owner)
@@ -213,7 +211,7 @@ def add_wishlist(request):
             return redirect(f'/globetrotters/travel_wishlist/{request.POST["owner"]}')
             # return render(request, 'globe_templates/upcoming_travels.html', context_dict)
         else:
-            # print(wishlist_form.errors)
+            print(wishlist_form.errors)
             pass
 
     return render(request, 'globe_templates/add_wishlist.html', {'form': wishlist_form,})
@@ -256,20 +254,17 @@ def my_trips(request):
     return render(request, 'globe_templates/my_trips.html')
 
 
+# FIND TRAVEL BUDDY
 
 def find_buddy(request):
     myBuddyFilter = BuddyFilter(request.GET, queryset=UpcomingTravel.objects.all().order_by('-destination'))
-    # myUserFilter = UserFilter(request.GET, queryset=UserProfile.objects.all())
-
 
     trips = myBuddyFilter.qs.order_by('-destination')
-    # users = myUserFilter.qs
 
-    # context_dict = {'myFilter': myBuddyFilter, 'myUserFilter': myUserFilter, 
-    #                 'trips': trips, 'users': users, }
     context_dict = {'myFilter': myBuddyFilter, 'trips': trips}
     return render(request, 'globe_templates/find_buddy.html', context_dict)
 
+# SEARCH USERS
 
 def search_users(request):
     if request.method == 'POST':
@@ -286,7 +281,7 @@ def search_users(request):
 
 
 
-# Messaging
+# MESSAGING
 # Code adapted from Legion Script on Youtube (https://www.youtube.com/watch?v=oxrQdZ5KqW0) (see bibliography)
 def list_threads(request):
     threads = MessageThread.objects.filter(Q(user=request.user) | Q(receiver=request.user))
@@ -313,6 +308,7 @@ def thread_view(request, pk):
     thread = MessageThread.objects.get(pk=pk) # the thread we'll show on screen
     messageList = Message.objects.filter(messageThread__pk__contains=pk)
 
+
     # print(pk)
     # print(thread.user.username)
 
@@ -322,6 +318,8 @@ def thread_view(request, pk):
     
     messageToList = []
     for message in messageList:
+        context_dict = {}
+        context_dict['receiver'] = UserProfile.objects.get(user=message.messageReceiver)
         if message.messageReceiver == thread.user:
             messageToList.append(message)
 
@@ -335,7 +333,7 @@ def thread_view(request, pk):
     print(thread.receiver)
     
     context_dict['sender'] = UserProfile.objects.get(user=thread.receiver)
-    context_dict['receiver'] = UserProfile.objects.get(user=message.messageReceiver)
+    # context_dict['receiver'] = UserProfile.objects.get(user=message.messageReceiver)
 
     return render(request, 'globe_templates/message_thread.html', context_dict)
 

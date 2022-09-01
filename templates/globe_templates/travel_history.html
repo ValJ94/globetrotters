@@ -16,15 +16,15 @@
     <div id="map"></div>
 </div>
 
-    <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
-        var savedMap = new mapboxgl.Map({
-            container: 'map',
-            // projection: 'globe',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            projection: 'naturalEarth',
-            zoom: 0.75
-        });
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var savedMap = new mapboxgl.Map({
+        container: 'map',
+        // projection: 'globe',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        projection: 'naturalEarth',
+        zoom: 0.75
+    });
 
 
     function getHistoryLocations() {
@@ -38,7 +38,7 @@
             success: function (response) {
                 console.log(response);
                 response.locationHistoryList.forEach(element => {
-                    new mapboxgl.Marker({ color: 'red' })
+                    new mapboxgl.Marker({ color: 'black' })
                         .setLngLat([element[0], element[1]])
                         .addTo(savedMap)
                 });
@@ -52,8 +52,8 @@
         });
         }
 
-        document.addEventListener("load", getHistoryLocations());
-    </script>
+    document.addEventListener("load", getHistoryLocations());
+</script>
 
 {% endblock %}
 

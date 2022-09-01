@@ -47,11 +47,14 @@ class Destination(models.Model):
 class TravelHistory(models.Model):
     owner = models.CharField(null=False, max_length=maxCharLength, blank=False, default='')
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    travelPics = models.ImageField(upload_to="travelPics", blank=True)
+    # travelPics = models.ImageField(upload_to="travelPics", blank=True)
     travelNotes = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = 'Travel Histories'
+
+    def __str__(self):
+         return self.destination.locationName + " - " + self.owner
     
 class TravelWishlist(models.Model):
     owner = models.CharField(max_length=maxCharLength)
@@ -72,6 +75,9 @@ class UpcomingTravel(models.Model):
     )
     dateFlexibility = models.CharField(max_length=2, choices=DATE_FLEX_CHOICES, blank=True)
     travelNotes = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.destination.locationName        
 
 
 

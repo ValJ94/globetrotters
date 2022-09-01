@@ -12,10 +12,11 @@ Add Location to Upcoming
 <div class="container_green">
     <br/>
     <h5>Add a destination to upcoming trips by putting it in the search bar on the map</h5>
-    <div id="map"></div> <br /><br />
+    <div id="map" ></div> <br /><br />
 </div>
 
 <script>
+    // Instantiate the map
     mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
     var map = new mapboxgl.Map({
         container: 'map',
@@ -25,6 +26,7 @@ Add Location to Upcoming
     });
 
     // Search box for locations (countries, cities, addresses etc)
+    // Provides geocoding functionality
     let myMap = map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -46,6 +48,7 @@ Add Location to Upcoming
         }
 
         // the following are values input into the form boxes
+        // To ensure all the data was grouped together, the form data was acquired this way along with the coordinates and location name above.
 
         let dateStart = $('#date_start').val();
         let dateEnd = $('#date_end').val();
@@ -92,6 +95,7 @@ Add Location to Upcoming
 
 </script>
 
+<!-- upcoming travel form -->
 <div class="content_centre"> <br/>
     <div>
         {% if user.is_authenticated %}
@@ -114,7 +118,7 @@ Add Location to Upcoming
     </script>
 
     <br/>
-    <a class="btn btn-outline-info" role="button" href="{% url 'globe_app:upcoming_travels' user %}">Return to Upcoming Trips</a><br/><br/>
+    <a class="btn btn-info" role="button" href="{% url 'globe_app:upcoming_travels' user %}">Return to Upcoming Trips</a><br/><br/>
 {% else %}
 <br />
     <h2>You must be registered or logged in to add to your upcoming travels.</h2><br /><br />

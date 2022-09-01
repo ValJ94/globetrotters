@@ -37,7 +37,7 @@
             success: function (response) {
                 console.log(response);
                 response.locationWishlistList.forEach(element => {
-                    new mapboxgl.Marker({ color: 'blue' })
+                    new mapboxgl.Marker({ color: 'lightgrey' })
                         .setLngLat([element[0], element[1]])
                         .addTo(savedMap)
                 });

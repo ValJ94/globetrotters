@@ -53,8 +53,8 @@ Find Buddy
                                     <li>Going to: {{ trip.destination }}</li>
                                     <li>From: {{ trip.dateStart }}</li>
                                     <li>To: {{ trip.dateEnd }}</li>
-                                    <li>Budget from: £{{ trip.budgetStart }}</li>
-                                    <li>Budget to: £{{ trip.budgetEnd }}</li>
+                                    <li>Daily budget from: £{{ trip.budgetStart }}</li>
+                                    <li>Daily budget to: £{{ trip.budgetEnd }}</li>
                                     <li><a class="btn btn-outline-success" role="button" href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Message {{ trip.owner }}</a></li>
                                 </p>
                             </ul>

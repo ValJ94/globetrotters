@@ -35,7 +35,10 @@ Homepage
 
 <div class="container_green"><br/><br/>
     <div class="index_picture">
-        <img src="{% static 'images/index.jpg' %}" style="height: 350px;" alt="How To Image" />
+        <img src="{% static 'images/index.jpg' %}" style="height: 350px;" alt="1. Register for an account. 
+        2. Add location to upcoming trips OR search for a buddy going to your desired location.
+        3. Send your match a message.
+        4. Plan your trip." />
     </div>
 </div>
 {% if user.is_authenticated %}
@@ -73,8 +76,8 @@ Homepage
 {% endblock %}
 
 {% block third_content_block %}
-<div>
+<!-- <div>
     <img src="{% static 'images/test.jpg' %}" alt="Test Image" />
-</div>
+</div> -->
 
 {% endblock %}
