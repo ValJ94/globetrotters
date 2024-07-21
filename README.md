@@ -16,3 +16,8 @@ Features:
   Profile pages: Each user has a profile page that displays their posts, travel destinations, and basic information.
   
   Search: Users can search for posts by keywords.
+
+
+
+
+Demonstration video: https://youtu.be/pmsgCiYEoSU
