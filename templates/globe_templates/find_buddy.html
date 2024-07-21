@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+Find Buddy
+{% endblock %}
+
+{% block content_block %}
+<div class="container_green">
+    <!-- <div class="row"> -->
+        <div class="text-center" style="background-color: #abe0bc">
+            <div class="bg-image" 
+            style="background-image: url({% static 'images/findbuddy.jpeg' %});background-size: cover;">
+                <form method="get" style="padding-top: 55px;">
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.destination.label }}: {{ myFilter.form.destination }} <br/>
+                    </p>
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.dateStart.label }}: {{ myFilter.form.dateStart }}
+                        {{ myFilter.form.dateEnd.label }}: {{ myFilter.form.dateEnd }} <br/>
+                    </p>
+                    <p style="margin-right: 25px;margin-bottom: 15px;">
+                        {{ myFilter.form.budgetStart.label }}: {{ myFilter.form.budgetStart }}
+                        {{ myFilter.form.budgetEnd.label }}: {{ myFilter.form.budgetEnd }}
+                    </p>
+                    <button class="btn btn-success" style="opacity: 0.8;" type="submit">
+                        Search for Buddy
+                    </button>
+                </form> 
+            <br /><br />
+            </div>
+        </div>
+    <!-- </div> -->
+</div>
+<div class="container_green"><br/>
+    <div class="row mb-3 justify-content-center">
+        <div class="card col-6 text-center p-3 shadow-sm" style="width: 95%;background-color: #688be95c;height: 100%;
+        position: relative;">
+            {% if trips %}
+            <br/>
+                <center><h4>Results</h4></center>
+                <div style="display: flex;flex-flow: wrap;">
+                    {% for trip in trips %}
+                    <div class="col-sm-4">
+                        <br/>
+                        
+                        <div class="card text-center col-12 p-3 shadow-sm" style="min-height: 305px;">
+                            <h5 class="card-header text-center col-12 text-center"><strong><a href="{% url 'globe_app:profile' trip.owner %}" style="color: #212529;">{{ trip.owner }}</a></strong></h5>
+                            <ul style="list-style-type: none;">
+                                <p class="card-text">
+                                    <li>Going to: {{ trip.destination }}</li>
+                                    <li>From: {{ trip.dateStart }}</li>
+                                    <li>To: {{ trip.dateEnd }}</li>
+                                    <li>Daily budget from: £{{ trip.budgetStart }}</li>
+                                    <li>Daily budget to: £{{ trip.budgetEnd }}</li>
+                                    <li><a class="btn btn-outline-success" role="button" href="{% url 'globe_app:create_or_find_message_thread' user trip.owner %}">Message {{ trip.owner }}</a></li>
+                                </p>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                There are currently no trips planned
+            {% endif %}
+        </div>
+    </div>
+
+<script>
+    $("#id_dateStart").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#id_dateEnd").datepicker({ dateFormat: 'yy-mm-dd' });
+</script>
+
+</div>
+{% endblock %}

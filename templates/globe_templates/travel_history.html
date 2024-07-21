@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Travel History
+{% endblock %}
+
+{% block content_block %}
+
+<div class="container_green">
+    <br/><h2>Travel History</h2><br/>
+    <a class="btn btn-success" role="button" href="{% url 'globe_app:add_history' %}">Add Location to Travel History</a>
+    <!-- Mapbox API (Mapbox.com) -->
+    <div id="map"></div>
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var savedMap = new mapboxgl.Map({
+        container: 'map',
+        // projection: 'globe',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        projection: 'naturalEarth',
+        zoom: 0.75
+    });
+
+
+    function getHistoryLocations() {
+        let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+        // ajax request to send the coordinates to the backend
+        $.ajax({
+            type: "GET",
+            url: "{% url 'globe_app:get_user_saved_history_locations' user %}",
+            headers: { 'X-CSRFToken': csrfToken },
+            // success and error are callbacks. They notify when the request is done.
+            success: function (response) {
+                console.log(response);
+                response.locationHistoryList.forEach(element => {
+                    new mapboxgl.Marker({ color: 'black' })
+                        .setLngLat([element[0], element[1]])
+                        .addTo(savedMap)
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('failed');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+        }
+
+    document.addEventListener("load", getHistoryLocations());
+</script>
+
+{% endblock %}
+
+
+{% block white_content_block %}
+<br/><br/>
+<center><h2>{{ user }}'s Travel History</h2></center>
+<br/>
+
+<div class="row mb-3 justify-content-center">
+    <div class="card col-6 text-center p-3 shadow-sm">
+    {% for trip in historyList %}
+        <h5 class="card-header" style="background-color: rgba(143, 213, 166, 75%);"><strong>{{ trip.destination }}</strong></h5>
+        <div class="card-body">
+            <p class="card-text">
+                <!-- <div class="travel_pictures"> -->
+                    <!-- {% if trip.travelPics %}
+                    <img src="{{ MEDIA_URL }}{{ trip.travelPics }}" alt="{{ user.username }}'s travel pictures " /><br />
+                    {% endif %} -->
+                <!-- </div> -->
+                Travel Notes: {{ trip.travelNotes }}
+            </p>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+Add Location to Upcoming
+{% endblock %}
+
+{% block content_block %}
+{% if user.is_authenticated %}
+
+<div class="container_green">
+    <br/>
+    <h5>Add a destination to upcoming trips by putting it in the search bar on the map</h5>
+    <div id="map" ></div> <br /><br />
+</div>
+
+<script>
+    // Instantiate the map
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        projection: 'naturalEarth',
+        zoom: 0.75
+    });
+
+    // Search box for locations (countries, cities, addresses etc)
+    // Provides geocoding functionality
+    let myMap = map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+        })
+    );
+
+    // save the location information to the backend from Mapbox API
+    function saveLocation() {
+        console.log(map._markers);
+        let latitude, longitude, locationFullName;
+
+        try {
+            latitude = map._markers[0]._lngLat.lat;
+            longitude = map._markers[0]._lngLat.lng;
+            locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+        } catch (e) {
+            $("#error_message_text").text('Please search for a location before submitting.');
+        }
+
+        // the following are values input into the form boxes
+        // To ensure all the data was grouped together, the form data was acquired this way along with the coordinates and location name above.
+
+        let dateStart = $('#date_start').val();
+        let dateEnd = $('#date_end').val();
+        let budgetStart = $('#budget_start').val();
+        let budgetEnd = $('#budget_end').val();
+        let owner = "{{user}}";
+        let noteContent = $('#travel_note').val();
+
+        if (!locationFullName || !latitude || !longitude) {
+            $("#error_message_text").text('Please check that you added a location.');
+            console.log('error message')
+            return;
+        }
+
+        let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+        // ajax request to send the coordinates to the backend
+        $.ajax({
+            type: "POST",
+            url: "{% url 'globe_app:save_location' %}",
+            headers: { 'X-CSRFToken': csrfToken },
+            data: {
+                'latitude': latitude,
+                'longitude': longitude,
+                'locationFullName': locationFullName,
+                'dateStart': dateStart,
+                'dateEnd': dateEnd,
+                'budgetStart': budgetStart,
+                'budgetEnd': budgetEnd,
+                'owner': owner,
+                'noteContent': noteContent,
+            },
+            // success and error are callbacks. They notify when the request is done.
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('failed');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }
+
+</script>
+
+<!-- upcoming travel form -->
+<div class="content_centre"> <br/>
+    <div>
+        {% if user.is_authenticated %}
+            {% csrf_token %}
+            <input type="hidden" />
+            {{ form.as_p }}
+            {{ form.media }}
+            <br />
+            <button class="btn btn-outline-success" type="button" name="submit"
+                onclick="saveLocation()">
+                Add To Upcoming Trips
+            </button>
+            <br/><span id="error_message_text" style="color: red;"></span>
+        {% endif %}
+    </div>
+
+    <script>
+        $("#date_start").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#date_end").datepicker({ dateFormat: 'yy-mm-dd' });
+    </script>
+
+    <br/>
+    <a class="btn btn-info" role="button" href="{% url 'globe_app:upcoming_travels' user %}">Return to Upcoming Trips</a><br/><br/>
+{% else %}
+<br />
+    <h2>You must be registered or logged in to add to your upcoming travels.</h2><br /><br />
+
+{% endif %}
+</div>
+
+{% endblock %}

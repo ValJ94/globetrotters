@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Register
+{% endblock %}
+
+{% block content_block %}
+
+<div class="container_green"><br/>
+    <div class="row">
+        <h2>Register to Globetrotters</h2>
+        <br/>
+        <form role="form" method="post" action=".">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success">
+                Register
+            </button> <br /><br/><br/>
+        </form>
+    </div>
+    <br/><br/>  
+</div>
+
+{% endblock %}

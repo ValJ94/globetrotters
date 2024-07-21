@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    About Globetrotters
+{% endblock %}
+
+{% block content_block %}
+<div class="container_green_standard"><br/><br/>
+    <div class="container" >
+        <div class="row">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="jumbotron-heading"> Welcome to Globetrotters!</h3>
+                    <hr><br/>
+                    This is a space for all travellers to connect. <br/>
+                    You can find travel buddies, show off your trips (upcoming trips, past trips and dream trips), 
+                    give or get advice/tricks/hints on the forum, and make friends with like-minded travellers.
+                </div>
+            </div>
+        </div>
+    </div><br/>
+
+    <div class="bg-image" 
+    style="background-image: url({% static 'images/about.jpeg' %});background-size: cover; padding-top:900px;">
+</div>
+
+{% endblock %}

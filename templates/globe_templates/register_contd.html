@@ -1,0 +1,26 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Registration
+{% endblock %}
+
+{% block content_block %}
+<div class="container_green"><br/>
+    <div class="row">
+        <h2>Add Your Details</h2>
+        <br/>
+        <form role="form" method="post" action="{% url 'globe_app:register_contd' %}" 
+        enctype="multipart/form-data"><br/>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success">
+                Submit
+            </button> <br /><br/><br/>
+        </form>
+    </div>
+    <br/><br/>  
+</div>
+
+{% endblock %}

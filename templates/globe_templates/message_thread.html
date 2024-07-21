@@ -1,0 +1,116 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Message Thread 
+{% endblock %}
+
+{% block content_block %}
+<!-- Header for the users in the messages -->
+<div class="container" style="width: 800px !important;"><br/>
+    <div class="row ">
+        <div class="card p-3" style="margin-left: 1%;background-color:#0054ff17;
+            width: 98%;"
+            {% if thread.receiver == request.user %}
+                <h5>
+                    <center>{{ thread.user }}</center>
+                </h5>
+            {% else %}
+                <h5>
+                <center>{{ thread.receiver }}</center>
+                </h5>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container_green_general rounded">
+    <!-- List to all the messages -->
+    {% if messageList.all.count == 0 %}
+        <div class="row my-5">
+            <div class="col-md-12">
+                <center><p>There are no messages</p></center>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for message in messageList %}
+    <h6>
+        <div class="row">
+            <div class="col-md-12 my-1">
+                {% if message.messageSender == request.user %}
+
+                <div class="d-flex flex-row justify-content-end mb-4" style="margin-left: 10px;">
+                    <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">
+                      <p class="small mb-0">{{ message.content }}</p>
+                    </div>
+                    {% if sender.picture %}
+                        <img src="{{ MEDIA_URL }}{{ sender.picture }}" alt="profile picture" style="width: 45px; height: 100%;border-radius:50px;margin-right: 5px;">
+                        <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+                        alt="profile picture" style="width: 45px; height: 100%;"> -->
+                    {% endif %}
+                  </div>
+                    <!-- Create some style here for the messages (differentiate between sender and receiver) -->
+                    <!-- <div class="col-md-offset-6">
+                        <div class="container_justify_right col-6">
+                            <p class="card p-3">
+                                {{ message.content }}
+                            </p>
+                        </div>
+                    </div> -->
+                {% elif message.messageReceiver == request.user %}
+
+                <div class="d-flex flex-row justify-content-start mb-4" style="margin-right: 10px;">
+                    {% if receiver.picture %}
+                    <img src="{{ MEDIA_URL }}{{ receiver.picture }}" alt="profile picture" style="width: 45px; height: 100%;border-radius:50px;margin-left: 5px;">
+                        <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                        alt="avatar 1" style="width: 45px; height: 100%;"> -->
+                    {% endif %}
+                    <div class="p-3 ms-3" style="border-radius: 15px; background-color: #e8f0fe">
+                      <p class="small mb-0">{{ message.content }}</p>
+                    </div>
+                  </div>
+                    <!-- <div class="col-md-4">
+                        <div class="container_green_left">
+                            <p class="card mt-2 p-3">
+                                {{ message.content }}
+                            </p>
+                        </div>
+                    </div> -->
+
+                {% endif %}
+            </div>
+        </div>
+    </h6>
+    {% endfor %}
+</div>
+<!-- Form to submit new message -->
+<div class="content_centre">
+    <!-- <div class="row">
+        <div class="card col-md-12 p-3">
+            
+        </div>
+    </div> -->
+    <div class="form-outline">
+        <form method="POST" action="{% url 'globe_app:create_message' thread.pk %}">
+            {% csrf_token %}
+            <div class="row">
+            {{ form }}
+
+            <div class= "mt-2">
+                <button class="btn btn-outline-success mb-2" 
+                style="width:100%;" type="submit">Send</button>
+            </div>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+<style>
+    textarea.form-control {
+        width: 98% !important;
+        margin-left: 1% !important;
+    }
+</style>
+{% endblock %}

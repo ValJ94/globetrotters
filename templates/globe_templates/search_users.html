@@ -1,0 +1,44 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Search Results
+{% endblock %}
+
+{% block content_block %}
+
+
+
+<div class="container_green"><br/>
+    <h2>Results for {{searched}}</h2> <br />
+    <div class="row mb-3 justify-content-center">
+        <div class="card col-6 text-center p-3 shadow-sm ">
+            {% if searched %}
+                {% for searchedUser in users %}
+                <h5 class="card-header text-center col-12 text-center"><strong>
+                    <a href="{% url 'globe_app:profile' searchedUser %}">{{ searchedUser }}</a></strong></h5>
+                <div class="card text-center col-12 p-3 shadow-sm">
+                    <ul style="list-style-type: none;">
+                        {% if searchedUser.picture %}
+                            <img src="{{ MEDIA_URL }}{{ searchedUser.picture }}" alt="{{ searchedUser }}'s profile picture " /><br />
+                        {% endif %}
+                        <li>User: <a href="{% url 'globe_app:profile' searchedUser %}">{{ searchedUser }}</a></li>
+                        <li><a href="{% url 'globe_app:create_or_find_message_thread' user searchedUser %}">Message {{ searchedUser }}</a></li>
+                        <li>Age: {{ searchedUser.age }}</li>
+                        <li>Gender: {{ searchedUser.gender }}</li>
+                        <li>Description: {{ searchedUser.description }}</li>
+                    </ul>
+                </div>
+                {% endfor %}
+
+            {% else %}
+                <h2>Please enter a user to search for</h2>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

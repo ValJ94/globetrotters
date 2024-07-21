@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Add destination to History
+{% endblock %}
+
+
+{% block content_block %}
+{% if user.is_authenticated %}
+<div class="container_green">
+    <br/>
+    <h5>Add a destination to your travel history by putting it in the search bar on the map</h5>
+    <div id="map"></div> <br /><br />
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        projection: 'naturalEarth',
+        zoom: 0.75
+    });
+
+    // Search box for locations (countries, cities, addresses etc)
+    let myMap = map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+        })
+    );
+
+    function saveHistoryLocation() {
+        console.log(map._markers);
+        let latitude, longitude, locationFullName;
+        console.log('HERE!');
+        try {
+            latitude = map._markers[0]._lngLat.lat;
+            longitude = map._markers[0]._lngLat.lng;
+            locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+        } catch (e) {
+            $("#error_message_text").text('Please search for a location before submitting.');
+        }
+
+        console.log('HERE 2!');
+        // let travelPics = $('#travel_pic').attr('src', '{{ MEDIA_URL }}');
+        let noteContent = $('#travel_note').val();
+        let owner = "{{user}}";
+        console.log('HERE 3!');
+
+        if (!locationFullName || !latitude || !longitude) {
+            $("#error_message_text").text('Please check that you added a location.');
+            console.log('error message')
+            return;
+        }
+
+        let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+        // ajax request to send the coordinates to the backend
+        $.ajax({
+            type: "POST",
+            url: "{% url 'globe_app:save_history_location' %}",
+            headers: { 'X-CSRFToken': csrfToken },
+            data: {
+                'latitude': latitude,
+                'longitude': longitude,
+                'locationFullName': locationFullName,
+                'owner': owner,
+                // 'travelPics': travelPics,
+                'noteContent': noteContent,
+            },
+            // success and error are callbacks. They notify when the request is done.
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('failed');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }
+    
+</script>
+<div class="content_centre"> <br/>
+    <div><h5>You can add a picture or notes relating to the trip you were on</h5><br/>
+    {% if user.is_authenticated %}
+            {% csrf_token %}
+            <!-- <input type="hidden"/> -->
+            {{ form.as_p }}
+            {{ form.media }}
+            <br />
+            <button class="btn btn-outline-success" type="button" name="submit" enctype="multipart/form-data"
+                onclick="saveHistoryLocation()">
+                Add To Travel History
+            </button>
+            <br/><span id="error_message_text" style="color: red;"></span>
+        {% endif %}
+    </div>
+
+
+    <br/>
+    <a class="btn btn-info" role="button" href="{% url 'globe_app:travel_history' user %}">Return to Travel History</a><br/><br/>
+    {% else %}
+        <br />
+            <h2>You must be registered or logged in to add to your upcoming travels.</h2><br /><br />
+    {% endif %}
+</div>
+{% endblock %}

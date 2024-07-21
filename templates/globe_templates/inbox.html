@@ -1,0 +1,36 @@
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Inbox 
+{% endblock %}
+
+{% block content_block %}
+
+<div class="container_green">
+    <div class="row">
+        <div class="p-5">
+            <h3>
+                Messages
+            </h3>
+        </div>
+    </div>
+
+
+    {% for threadObject in threadList %}
+        <div class="row mb-3 justify-content-center">
+            <div class="card col-5 p-3" style="background: #ffffffd4;
+                border-left: 5px solid black;">
+                <h5>
+                    {{ threadObject.thread.receiver }} (Unread Messages: {{ threadObject.messages.unreadMessages }})
+                </h5>
+                <a class="stretched-link" href="{% url 'globe_app:thread' threadObject.thread.pk %}"></a>
+            </div> 
+        </div><br/>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

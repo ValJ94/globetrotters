@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Log in
+{% endblock %}
+
+{% block content_block %}
+{% if user.is_authenticated %}
+<br/><br/><br/>
+    <h4>You are already logged in.</h4>
+<br/><br/><br/>
+{% else %}
+
+<div class="container_green"><br/>
+    <div class="row">
+        <h2>Log In</h2>
+        <form role="form" method="post" action=".">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="btn btn-success">
+                Log In
+            </button> <br /><br/><br/>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
+    </div>
+    <h2>Not Registered Yet?</h2> 
+    <a href="{% url 'registration_register' %}" type="button" class="btn btn-success">
+        Register
+    </a> <br />
+    <br/><br/>  
+</div>
+{% endif %}
+{% endblock %}

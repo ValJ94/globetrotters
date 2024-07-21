@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Logged Out
+{% endblock %}
+
+{% block content_block %}
+<div>
+    <h1>
+        You have logged out successfully. </b>
+    </h1>
+</div>
+<div>
+    Return to the 
+    <a href="{% url 'index' %}">Homepage</a>
+</div>
+
+
+{% endblock %}

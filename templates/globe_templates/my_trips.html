@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    My Trips
+{% endblock %}
+
+{% block content_block %}
+<div class="container_green">
+    <br/><h4>{{ user.username }}'s Trips</h4> <br/><br/>
+
+    <a href="{% url 'globe_app:upcoming_travels' user.username %}"
+    class="btn btn-success btn-lg active" role="button" aria-pressed="true">Upcoming Trips</a>
+    <hr/>
+    <a href="{% url 'globe_app:travel_history' user.username %}"
+    class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Travel History</a>
+    <hr/>
+    <a href="{% url 'globe_app:travel_wishlist' user.username %}" 
+    class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Travel Wishlist</a>
+    <br/><br/><br/>
+</div>
+{% endblock %}

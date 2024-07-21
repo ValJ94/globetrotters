@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+Homepage
+{% endblock %}
+
+{% block content_block %}
+<div class="container_green">
+    <!-- <div class="index_background">
+        
+        <img src="{% static 'images/index.jpeg' %}"/>
+    </div> -->
+    <div class="bg-image" 
+     style="background-image: url({% static 'images/index.jpeg' %}); background-size: cover;">
+            <div class="container" style="padding: 18%;" >
+                <div class="row">
+                    <div class="card mb-4 " style="opacity: 0.8;">
+                        <div class="card-body">
+                            <h3 class="jumbotron-heading"> Don't want to travel alone?</h3>
+                            <br/>
+                            Find your travel buddy here!
+                            <hr>
+                            How it works:
+                        </div>
+                    </div>
+                </div>
+            </div><br/>
+    </div>
+</div>
+
+
+
+<div class="container_green"><br/><br/>
+    <div class="index_picture">
+        <img src="{% static 'images/index.jpg' %}" style="height: 350px;" alt="1. Register for an account. 
+        2. Add location to upcoming trips OR search for a buddy going to your desired location.
+        3. Send your match a message.
+        4. Plan your trip." />
+    </div>
+</div>
+{% if user.is_authenticated %}
+
+{% endif %}
+{% endblock %}
+
+{% block white_content_block %}
+
+<!-- <div class="index_registration">
+    <h5>Register here: <br/><br/></h5>
+    <a href="{% url 'registration_register' %}" 
+    type="button" class="btn btn-dark">Register</a> <br/><br/><br/>
+
+    <h5>Already have an account?<br/><br/></h5>
+    <a href="{% url 'auth_login' %}"
+     type="button" class="btn btn-dark" >Log In</a> <br/><br/><br/>
+
+</div> -->
+
+<div class="row">
+    <div class="col-sm-6 text-center pt-5" style="background-image: url({% static 'images/index.jpeg' %});">
+        <h5>Create a new account <br/><br/></h5>
+        <a href="{% url 'registration_register' %}" 
+        type="button" class="btn btn-dark">Register</a> <br/><br/><br/>
+    </div>
+    <div class="col-sm-6 text-center pt-5" style="background-image: url({% static 'images/index.jpeg' %});">
+        <h5>Already have an account?<br/><br/></h5>
+        <a href="{% url 'auth_login' %}"
+         type="button" class="btn btn-dark" >Log In</a> <br/><br/><br/>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block third_content_block %}
+<!-- <div>
+    <img src="{% static 'images/test.jpg' %}" alt="Test Image" />
+</div> -->
+
+{% endblock %}

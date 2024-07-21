@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% extends 'globe_templates/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Add destination to Travel Wishlist
+{% endblock %}
+
+
+{% block content_block %}
+{% if user.is_authenticated %}
+
+<div class="container_green">
+    <br/>
+    <h5>Add a destination to your travel wishlist by putting it in the search bar on the map</h5>
+    <div id="map"></div> <br /><br />
+</div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoidmFsYm9yZ2pvaGFubmVzZW4iLCJhIjoiY2w1czlxdTg1MDJqMjNpbXIzMmE3Z2ZpMSJ9.KhJK2veJjqe6FZ4YtnKkSw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            projection: 'naturalEarth',
+            zoom: 0.75
+        });
+
+        // Search box for locations (countries, cities, addresses etc)
+        let myMap = map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl,
+            })
+        );
+
+        function saveWishlistLocation() {
+            console.log(map._markers);
+            let latitude = map._markers[0]._lngLat.lat;
+            let longitude = map._markers[0]._lngLat.lng;
+            let locationFullName = $('.mapboxgl-ctrl-geocoder--input')[0].value; // jQuery to get the name of location
+            // the following are values input into the form boxes
+
+            let noteContent = $('#travel_note').val();
+            let owner = "{{user}}";
+
+            if (!locationFullName || !latitude || !longitude) {
+                return;
+            }
+
+            let csrfToken = document.cookie.split('=')[1]; // grab the csrf token from the cookies
+            $.ajax({
+                type: "POST",
+                url: "{% url 'globe_app:save_wishlist_location' %}",
+                headers: { 'X-CSRFToken': csrfToken },
+                data: {
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'locationFullName': locationFullName,
+                    'owner': owner,
+                    'noteContent': noteContent,
+                },
+                // success and error are callbacks. They notify when the request is done.
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('failed');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+        }
+        
+    </script>
+
+<div class="content_centre"> <br/>
+    <div><h5>You can add notes relating to the trip</h5><br/>
+        {% if user.is_authenticated %}
+            {% csrf_token %}
+            <!-- <input type="hidden"/> -->
+            {{ form.as_p }}
+            {{ form.media }}
+            <br />
+            <button class="btn btn-outline-success" type="button" name="submit" enctype="multipart/form-data"
+                onclick="saveWishlistLocation()">
+                Add To Travel Wishlist
+            </button>
+        {% endif %}
+    </div>
+    <br />
+    <a class="btn btn-info" role="button" href="{% url 'globe_app:travel_wishlist' user %}">Return to Travel Wishlist</a><br/><br/>
+    {% else %}
+        <br />
+            <h2>You must be registered or logged in to add to your travel wishlist.</h2><br /><br />
+    {% endif %}
+</div>
+{% endblock %}
